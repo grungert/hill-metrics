@@ -1,0 +1,143 @@
+# Hill Metrics Financial Screener - Project Intelligence
+
+## Project Patterns
+
+### Coding Standards
+- Follow C# coding conventions for backend development
+- Follow React/JavaScript best practices for frontend development
+- Use camelCase for JavaScript variables and functions
+- Use PascalCase for C# classes and methods
+- Use kebab-case for file names in the frontend
+- Use PascalCase for file names in the backend
+- Maintain consistent indentation (2 spaces for JavaScript, 4 spaces for C#)
+- Add XML documentation comments to public C# APIs
+- Use JSDoc comments for complex JavaScript functions
+
+### Naming Conventions
+- Prefix interface names with "I" in C# (e.g., IInstrumentRepository)
+- Suffix repository classes with "Repository" (e.g., InstrumentRepository)
+- Suffix service classes with "Service" (e.g., InstrumentService)
+- Suffix controller classes with "Controller" (e.g., InstrumentsController)
+- Use plural names for API endpoints (e.g., /api/instruments)
+- Use singular names for database tables (e.g., Instrument)
+- Prefix React component files with uppercase (e.g., SearchBar.jsx)
+
+### Architecture Patterns
+- Follow the repository pattern for data access
+- Use dependency injection for service resolution
+- Implement services for business logic
+- Use controllers for API endpoints
+- Separate concerns between data access, business logic, and presentation
+- Use DTOs for data transfer between layers
+- Implement proper validation at API boundaries
+
+### Frontend Patterns
+- Use functional components with hooks in React
+- Implement container/presentational component pattern
+- Use custom hooks for reusable logic
+- Implement proper error handling and loading states
+- Use async/await for asynchronous operations
+- Implement responsive design for all components
+- Use CSS modules or styled-components for styling
+
+### Frontend Page Creation
+- User will provide code for frontend pages
+- When starting work on frontend components, ask user to provide code files
+- Follow provided code patterns for consistency across the application
+- Implement provided code with minimal modifications unless improvements are necessary
+
+### Database Patterns
+- Use migrations for database schema changes
+- Implement proper indexing for frequently queried columns
+- Use foreign key constraints for referential integrity
+- Implement soft delete where appropriate
+- Use stored procedures for complex queries (if necessary)
+- Implement proper transaction handling
+
+## User Preferences
+
+### Communication Style
+- Provide clear, concise explanations
+- Use technical terminology appropriately
+- Include code examples when explaining concepts
+- Offer multiple solutions with pros and cons when applicable
+- Explain the reasoning behind technical decisions
+
+### Development Workflow
+- Focus on one feature at a time
+- Implement core functionality before adding enhancements
+- Write tests for critical functionality
+- Document complex logic and decisions
+- Refactor code when necessary to maintain quality
+- Commit and push changes to Git after completing each step with descriptive commit messages
+
+### Code Quality Priorities
+- Maintainability and readability
+- Performance optimization for critical paths
+- Proper error handling and edge cases
+- Comprehensive test coverage
+- Clear documentation
+
+## Project-Specific Knowledge
+
+### Critical Implementation Paths
+- Search and filtering functionality is a core feature
+- Instrument comparison requires special attention to performance
+- User authentication and authorization is essential for security
+- Data visualization needs to be responsive and interactive
+
+### Known Challenges
+- Complex filtering requirements across multiple dimensions
+- Performance considerations with large datasets
+- Cross-asset comparison with different attributes
+- User interface complexity with many features and options
+
+### Technical Constraints
+- MySQL database for data storage
+- .NET Core for backend development
+- React for frontend development
+- JWT for authentication
+- Responsive design for various devices
+
+## Tool Usage Patterns
+
+### Development Tools
+- Visual Studio or Visual Studio Code for development
+- npm or yarn for frontend package management
+- NuGet for backend package management
+- Entity Framework Core for database access
+- Git for version control
+
+### Testing Tools
+- xUnit for backend unit testing
+- Jest for frontend unit testing
+- React Testing Library for component testing
+- Postman for API testing
+- Cypress for end-to-end testing (if needed)
+
+### Deployment Tools
+- Docker for containerization (optional)
+- CI/CD pipeline for automated deployment
+- Environment-specific configuration files
+
+## Project Evolution
+
+### Phase 1: Core Functionality
+- Basic search and filtering
+- Results display
+- Instrument details view
+
+### Phase 2: Enhanced Features
+- Instrument comparison
+- Data visualization
+- User authentication
+
+### Phase 3: Advanced Capabilities
+- Advanced filtering options
+- Saved searches and preferences
+- Performance optimizations
+
+### Future Considerations
+- Mobile applications
+- Real-time data updates
+- Advanced analytics and recommendations
