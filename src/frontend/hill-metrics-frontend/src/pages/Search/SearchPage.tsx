@@ -1,37 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '../../components/Header';
 import FilterBar from '../../components/FilterBar';
 import DataTable from '../../components/DataTable';
+import SelectedFilters from '../../components/SelectedFilters';
 import { TableColumn, AssetItem } from '../../types/dashboard';
+import { FilterType, FilterItem } from '../../types/filters';
 
 const SearchPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'search' | 'comparison'>('search');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [filters, setFilters] = useState<Record<string, number[]>>({});
+  const [selectedFilterPills, setSelectedFilterPills] = useState<FilterItem[]>([]);
   
   // Sample data for demonstration
   const [data, setData] = useState<AssetItem[]>([
     {
-      id: 1,
-      name: 'Apple Inc.',
-      category: 'Technology',
-      currency: 'USD',
-      rating: 'AAA',
-      ytdPercentage: 15.4,
-      oneYearPercentage: 42.7,
-      threeYearPercentage: 125.3,
-      date: '2025-03-15'
+      id: 3,
+      name: 'Vanguard S&P 500 Index Fund',
+      category: 'Index Fund',
+      currency: 'EUR',
+      rating: 4,
+      risk: '1/7',
+      ytdPercentage: 6.22,
+      oneYearPercentage: 5.25,
+      threeYearPercentage: 20.99,
+      date: '2024-04-22'
     },
     {
-      id: 2,
-      name: 'Microsoft Corporation',
-      category: 'Technology',
-      currency: 'USD',
-      rating: 'AAA',
-      ytdPercentage: 12.8,
-      oneYearPercentage: 38.2,
-      threeYearPercentage: 118.7,
-      date: '2025-03-15'
+      id: 6,
+      name: 'USD Coin',
+      category: 'Stablecoin',
+      currency: 'EUR',
+      rating: 3,
+      risk: '1/7',
+      ytdPercentage: 6.22,
+      oneYearPercentage: 5.92,
+      threeYearPercentage: 17.31,
+      date: '2024-04-18'
+    },
+    {
+      id: 5,
+      name: 'Schwab S&P 500 Index Fund',
+      category: 'Index Fund',
+      currency: 'EUR',
+      rating: 3,
+      risk: '1/7',
+      ytdPercentage: 6.22,
+      oneYearPercentage: 5.92,
+      threeYearPercentage: 17.31,
+      date: '2024-04-18'
+    },
+    {
+      id: 4,
+      name: 'Tether',
+      category: 'Stablecoin',
+      currency: 'EUR',
+      rating: 5,
+      risk: '1/7',
+      ytdPercentage: 6.22,
+      oneYearPercentage: 8.27,
+      threeYearPercentage: 27.98,
+      date: '2024-04-22'
+    },
+    {
+      id: 17,
+      name: 'Fidelity 500 Index Fund',
+      category: 'Exchange Token',
+      currency: 'EUR',
+      rating: 3,
+      risk: '1/7',
+      ytdPercentage: 6.22,
+      oneYearPercentage: 5.92,
+      threeYearPercentage: 17.31,
+      date: '2024-04-18'
     }
   ]);
 
@@ -39,13 +80,15 @@ const SearchPage: React.FC = () => {
   const columns: TableColumn[] = [
     { id: 'number', label: '#', width: '10' },
     { id: 'name', label: 'Name', flex: true },
-    { id: 'category', label: 'Category', width: '205px' },
-    { id: 'currency', label: 'Currency', width: '140px' },
+    { id: 'category', label: 'Category', width: '305px' },
+    { id: 'pricing', label: 'Pricing', width: '120px' },
+    { id: 'currency', label: 'Currency', width: '120px' },
     { id: 'rating', label: 'Rating', width: '140px' },
-    { id: 'ytdPercentage', label: 'YTD %', width: '120px' },
-    { id: 'oneYearPercentage', label: '1-Year %', width: '120px' },
-    { id: 'threeYearPercentage', label: '3-Year %', width: '120px' },
-    { id: 'date', label: 'Date', width: '120px' },
+    { id: 'risk', label: 'Risk', width: '80px' },
+    { id: 'ytdPercentage', label: 'YTD %', width: '100px' },
+    { id: 'oneYearPercentage', label: '1-Year %', width: '200px' },
+    { id: 'threeYearPercentage', label: '3-Year %', width: '200px' },
+    { id: 'date', label: 'Date', width: '220px' },
   ];
 
   const handleTabChange = (tab: 'search' | 'comparison') => {
@@ -59,13 +102,45 @@ const SearchPage: React.FC = () => {
     // For now, we'll just log the query
   };
 
-  const handleFilterChange = (filterType: string, value: string) => {
+  const handleFilterChange = (filterType: string, selectedIds: number[]) => {
     setFilters(prev => ({
       ...prev,
-      [filterType]: value
+      [filterType]: selectedIds
     }));
-    console.log(`Filter changed: ${filterType} = ${value}`);
+    console.log(`Filter changed: ${filterType} = ${selectedIds.join(', ')}`);
     // In a real application, this would update the data based on filters
+    
+    // For demonstration purposes, filter the data if assets are selected
+    if (filterType === 'assets' && selectedIds.length > 0) {
+      // This is just a simple example - in a real app, you would have more complex filtering logic
+      // For now, we'll just show or hide the sample data based on whether any filters are selected
+      setData(selectedIds.length > 0 ? [] : [
+        {
+          id: 1,
+          name: 'Apple Inc.',
+          category: 'Technology',
+          currency: 'USD',
+          rating: 5,
+          risk: '2/7',
+          ytdPercentage: 15.4,
+          oneYearPercentage: 42.7,
+          threeYearPercentage: 125.3,
+          date: '2025-03-15'
+        },
+        {
+          id: 2,
+          name: 'Microsoft Corporation',
+          category: 'Technology',
+          currency: 'USD',
+          rating: 5,
+          risk: '2/7',
+          ytdPercentage: 12.8,
+          oneYearPercentage: 38.2,
+          threeYearPercentage: 118.7,
+          date: '2025-03-15'
+        }
+      ]);
+    }
   };
 
   const handleRowSelect = (id: string | number, selected: boolean) => {
@@ -78,6 +153,23 @@ const SearchPage: React.FC = () => {
     // In a real application, this would filter the data in the table
   };
 
+  // Reference to the FilterBar component
+  const filterBarRef = useRef<any>(null);
+
+  const handleRemoveFilter = (filter: FilterItem) => {
+    // Remove the filter from the selected filters
+    setSelectedFilterPills(prev => prev.filter(f => 
+      !(f.type === filter.type && f.label === filter.label && f.value === filter.value)
+    ));
+    
+    // Update the filter state in the FilterBar component
+    if (filterBarRef.current && filterBarRef.current.handleFilterRemove) {
+      filterBarRef.current.handleFilterRemove(filter.type, filter.value);
+    }
+    
+    console.log(`Removed filter: ${filter.type} - ${filter.label}: ${filter.value}`);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header 
@@ -86,7 +178,15 @@ const SearchPage: React.FC = () => {
         onSearch={handleSearch}
       />
       <div className="flex flex-col flex-1 bg-slate-50">
-        <FilterBar onFilterChange={handleFilterChange} />
+        <FilterBar 
+          ref={filterBarRef}
+          onFilterChange={handleFilterChange} 
+          onFilterPillsChange={setSelectedFilterPills}
+        />
+        <SelectedFilters 
+          filters={selectedFilterPills} 
+          onRemoveFilter={handleRemoveFilter} 
+        />
         <div className="flex flex-col flex-1 gap-8 pt-3 pb-5 px-5">
           <DataTable 
             columns={columns} 

@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import FilterButton from '../ui/FilterButton';
 import FilterPanel from './FilterPanel/FilterPanel';
 import MostUsedFilterPanel from './MostUsedFilterPanel/MostUsedFilterPanel';
 import AdvancedFilterPanel from './AdvancedFilterPanel/AdvancedFilterPanel';
+import { FilterType, FilterItem } from '../types/filters';
 import { 
   assetFilterOptions, 
   cryptoFilterOptions,
@@ -32,18 +33,46 @@ const mostUsedFilterOptions = [
   { id: 2, name: 'Frequently Used', parentId: null },
   { id: 3, name: 'Favorites', parentId: null }
 ];
-import { FilterType } from '../types/filters';
 
 interface FilterBarProps {
   onFilterChange?: (filterType: string, selectedIds: number[]) => void;
+  onFilterPillsChange?: (filterPills: FilterItem[]) => void;
+  onFilterRemove?: (filterType: FilterType, filterValue: string) => void;
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
+// Define the ref type
+export interface FilterBarRef {
+  handleFilterRemove: (filterType: FilterType, filterValue: string) => void;
+}
+
+// Define a type for the Most Used filter state
+interface MostUsedFilterState {
+  returnCriteria?: {
+    comparison: string;
+    value: string;
+    period: string;
+  };
+  riskLevel?: string;
+  liquidityLevel?: string;
+  marketcapLevel?: string;
+}
+
+const FilterBar = forwardRef<FilterBarRef, FilterBarProps>((props, ref) => {
+  const { onFilterChange, onFilterPillsChange } = props;
+  
   const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<{[key in FilterType]?: any}>({});
   const [selectedAssetType, setSelectedAssetType] = useState<string>('Cryptocurrency');
   const filterButtonRefs = useRef<{[key in FilterType]?: HTMLDivElement | null}>({});
   const [filterPosition, setFilterPosition] = useState<{top: number, left: number} | null>(null);
+  const [filterPills, setFilterPills] = useState<FilterItem[]>([]);
+  
+  // Effect to notify parent of filter pills changes
+  useEffect(() => {
+    if (onFilterPillsChange) {
+      onFilterPillsChange(filterPills);
+    }
+  }, [filterPills, onFilterPillsChange]);
 
   const handleFilterClick = (filterType: FilterType) => {
     // If the same filter is clicked again, close it
@@ -70,22 +99,113 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
     setActiveFilter(null);
   };
 
-  const handleApplyFilters = (filterType: FilterType, selectedData: any) => {
+  const handleApplyFilters = (filterType: FilterType, selectedIds: number[], selectedOptions?: any) => {
     // Update the selected filters
     setSelectedFilters(prev => ({
       ...prev,
-      [filterType]: selectedData
+      [filterType]: selectedIds
     }));
+
+    // Create filter pills based on the selected options
+    if (filterType !== FilterType.MOST_USED) {
+      // For regular filter panels (Assets, Sector, Market)
+      if (selectedOptions && Array.isArray(selectedOptions)) {
+        // Create filter pills for each selected option
+        const newPills = selectedOptions.map(option => ({
+          type: filterType,
+          label: getFilterTypeLabel(filterType),
+          value: option.name
+        }));
+
+        // Update filter pills
+        setFilterPills(prev => {
+          // Remove existing pills for this filter type
+          const filteredPills = prev.filter(pill => pill.type !== filterType);
+          // Add new pills
+          return [...filteredPills, ...newPills];
+        });
+      }
+    } else {
+      // For Most Used filter panel
+      // Handle special case for Most Used filter
+      const mostUsedFilters = selectedOptions as MostUsedFilterState;
+      
+      // Create pills for each active filter in Most Used
+      const newPills: FilterItem[] = [];
+      
+      // Check if return criteria is set
+      if (mostUsedFilters?.returnCriteria && 
+          (mostUsedFilters.returnCriteria.comparison !== 'Greater than' || 
+           mostUsedFilters.returnCriteria.value !== '10%' || 
+           mostUsedFilters.returnCriteria.period !== '1 year')) {
+        newPills.push({
+          type: FilterType.COMMON,
+          label: mostUsedFilters.returnCriteria.period,
+          value: `${mostUsedFilters.returnCriteria.comparison} ${mostUsedFilters.returnCriteria.value}`
+        });
+      }
+      
+      // Check if risk level is set
+      if (mostUsedFilters?.riskLevel && mostUsedFilters.riskLevel !== 'Very Low') {
+        newPills.push({
+          type: FilterType.COMMON,
+          label: 'Risk',
+          value: mostUsedFilters.riskLevel
+        });
+      }
+      
+      // Check if liquidity level is set
+      if (mostUsedFilters?.liquidityLevel && mostUsedFilters.liquidityLevel !== 'Very High') {
+        newPills.push({
+          type: FilterType.COMMON,
+          label: 'Liquidity',
+          value: mostUsedFilters.liquidityLevel
+        });
+      }
+      
+      // Check if marketcap level is set
+      if (mostUsedFilters?.marketcapLevel && mostUsedFilters.marketcapLevel !== 'Very High') {
+        newPills.push({
+          type: FilterType.COMMON,
+          label: 'Marketcap',
+          value: mostUsedFilters.marketcapLevel
+        });
+      }
+      
+      // Update filter pills
+      setFilterPills(prev => {
+        // Remove existing pills for this filter type
+        const filteredPills = prev.filter(pill => pill.type !== FilterType.COMMON);
+        // Add new pills
+        return [...filteredPills, ...newPills];
+      });
+    }
 
     // Call the parent component's onFilterChange callback
     if (onFilterChange) {
-      // For most used filter, we pass the entire filter state
-      // For other filters, we pass the selected IDs
-      const dataToPass = filterType === FilterType.MOST_USED 
-        ? selectedData 
-        : selectedData;
-      
-      onFilterChange(filterType, dataToPass);
+      onFilterChange(filterType, selectedIds);
+    }
+  };
+  
+  // Helper function to get display name for filter types
+  const getFilterTypeLabel = (type: FilterType): string => {
+    switch (type) {
+      case FilterType.ASSETS:
+        return 'Assets';
+      case FilterType.SECTOR:
+        return 'Sector';
+      case FilterType.MARKET:
+        return 'Market';
+      case FilterType.MOST_USED:
+        return 'Most used';
+      case FilterType.ADVANCED:
+        return 'Advanced';
+      case FilterType.COMMON:
+        return 'Common';
+      case FilterType.SYNTHETIC:
+        return 'Synthetic';
+      default:
+        return type;
     }
   };
 
@@ -94,6 +214,102 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
     setSelectedAssetType(newAssetType);
   };
 
+  // Method to handle removing a filter when a pill is closed
+  const handleFilterRemove = (filterType: FilterType, filterValue: string) => {
+    if (filterType === FilterType.COMMON) {
+      // Handle Most Used filter removal
+      const mostUsedFilters = selectedFilters[FilterType.MOST_USED];
+      if (!mostUsedFilters) return;
+      
+      // Create a copy of the current filters
+      const updatedMostUsedFilters = { ...mostUsedFilters };
+      
+      // Check which property to reset based on the filter value
+      if (filterValue.includes('Risk')) {
+        updatedMostUsedFilters.riskLevel = 'Very Low';
+      } else if (filterValue.includes('Liquidity')) {
+        updatedMostUsedFilters.liquidityLevel = 'Very High';
+      } else if (filterValue.includes('Marketcap')) {
+        updatedMostUsedFilters.marketcapLevel = 'Very High';
+      } else {
+        // Assume it's a return criteria filter
+        updatedMostUsedFilters.returnCriteria = {
+          comparison: 'Greater than',
+          value: '10%',
+          period: '1 year'
+        };
+      }
+      
+      // Update the filters
+      setSelectedFilters(prev => ({
+        ...prev,
+        [FilterType.MOST_USED]: updatedMostUsedFilters
+      }));
+      
+      // Update the filter pills
+      setFilterPills(prev => 
+        prev.filter(pill => 
+          !(pill.type === FilterType.COMMON && pill.value === filterValue)
+        )
+      );
+      
+      // Notify parent of filter change
+      if (onFilterChange) {
+        onFilterChange(FilterType.MOST_USED, []);
+      }
+    } else {
+      // Handle regular filter removal (Assets, Sector, Market, Advanced)
+      const currentFilters = selectedFilters[filterType] || [];
+      
+      // Find the option with the matching name
+      let optionsToSearch: any[] = [];
+      
+      switch (filterType) {
+        case FilterType.ASSETS:
+          optionsToSearch = assetFilterOptions;
+          break;
+        case FilterType.SECTOR:
+          optionsToSearch = sectorFilterOptions;
+          break;
+        case FilterType.MARKET:
+          optionsToSearch = marketFilterOptions;
+          break;
+        default:
+          return; // Unsupported filter type
+      }
+      
+      // Find the option with the matching name
+      const option = optionsToSearch.find(opt => opt.name === filterValue);
+      if (!option) return;
+      
+      // Remove the option ID from the selected filters
+      const updatedFilters = currentFilters.filter((id: number) => id !== option.id);
+      
+      // Update the filters
+      setSelectedFilters(prev => ({
+        ...prev,
+        [filterType]: updatedFilters
+      }));
+      
+      // Update the filter pills
+      setFilterPills(prev => 
+        prev.filter(pill => 
+          !(pill.type === filterType && pill.value === filterValue)
+        )
+      );
+      
+      // Notify parent of filter change
+      if (onFilterChange) {
+        onFilterChange(filterType, updatedFilters);
+      }
+    }
+  };
+  
+  // Expose the handleFilterRemove method to the parent component
+  useImperativeHandle(ref, () => ({
+    handleFilterRemove
+  }));
+  
   // Get the count of selected filters for a specific filter type
   const getSelectedCount = (filterType: FilterType): number => {
     if (filterType === FilterType.MOST_USED) {
@@ -211,7 +427,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
           options={assetFilterOptions}
           isOpen={true}
           onClose={handleFilterClose}
-          onApplyFilters={(selectedIds) => handleApplyFilters(FilterType.ASSETS, selectedIds)}
+          onApplyFilters={(selectedIds, selectedOptions) => handleApplyFilters(FilterType.ASSETS, selectedIds, selectedOptions)}
           initialSelectedIds={selectedFilters[FilterType.ASSETS] || []}
           position={filterPosition}
         />
@@ -224,7 +440,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
           options={sectorFilterOptions}
           isOpen={true}
           onClose={handleFilterClose}
-          onApplyFilters={(selectedIds) => handleApplyFilters(FilterType.SECTOR, selectedIds)}
+          onApplyFilters={(selectedIds, selectedOptions) => handleApplyFilters(FilterType.SECTOR, selectedIds, selectedOptions)}
           initialSelectedIds={selectedFilters[FilterType.SECTOR] || []}
           position={filterPosition}
         />
@@ -237,7 +453,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
           options={marketFilterOptions}
           isOpen={true}
           onClose={handleFilterClose}
-          onApplyFilters={(selectedIds) => handleApplyFilters(FilterType.MARKET, selectedIds)}
+          onApplyFilters={(selectedIds, selectedOptions) => handleApplyFilters(FilterType.MARKET, selectedIds, selectedOptions)}
           initialSelectedIds={selectedFilters[FilterType.MARKET] || []}
           position={filterPosition}
         />
@@ -248,7 +464,69 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
         <MostUsedFilterPanel
           isOpen={true}
           onClose={handleFilterClose}
-          onApplyFilters={(filters) => handleApplyFilters(FilterType.MOST_USED, filters)}
+          onApplyFilters={(filters) => {
+            // Special handling for Most Used filters
+            setSelectedFilters(prev => ({
+              ...prev,
+              [FilterType.MOST_USED]: filters
+            }));
+            
+            // Create pills for each active filter in Most Used
+            const newPills: FilterItem[] = [];
+            
+            // Check if return criteria is set
+            if (filters.returnCriteria && 
+                (filters.returnCriteria.comparison !== 'Greater than' || 
+                 filters.returnCriteria.value !== '10%' || 
+                 filters.returnCriteria.period !== '1 year')) {
+              newPills.push({
+                type: FilterType.COMMON,
+                label: filters.returnCriteria.period,
+                value: `${filters.returnCriteria.comparison} ${filters.returnCriteria.value}`
+              });
+            }
+            
+            // Check if risk level is set
+            if (filters.riskLevel && filters.riskLevel !== 'Very Low') {
+              newPills.push({
+                type: FilterType.COMMON,
+                label: 'Risk',
+                value: filters.riskLevel
+              });
+            }
+            
+            // Check if liquidity level is set
+            if (filters.liquidityLevel && filters.liquidityLevel !== 'Very High') {
+              newPills.push({
+                type: FilterType.COMMON,
+                label: 'Liquidity',
+                value: filters.liquidityLevel
+              });
+            }
+            
+            // Check if marketcap level is set
+            if (filters.marketcapLevel && filters.marketcapLevel !== 'Very High') {
+              newPills.push({
+                type: FilterType.COMMON,
+                label: 'Marketcap',
+                value: filters.marketcapLevel
+              });
+            }
+            
+            // Update filter pills
+            setFilterPills(prev => {
+              // Remove existing pills for this filter type
+              const filteredPills = prev.filter(pill => pill.type !== FilterType.COMMON);
+              // Add new pills
+              return [...filteredPills, ...newPills];
+            });
+            
+            // Call the parent component's onFilterChange callback
+            if (onFilterChange) {
+              // For Most Used filter, we pass an empty array as selectedIds
+              onFilterChange(FilterType.MOST_USED, []);
+            }
+          }}
           initialFilters={selectedFilters[FilterType.MOST_USED]}
           position={filterPosition}
         />
@@ -276,6 +554,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
       )}
     </div>
   );
-};
+});
 
 export default FilterBar;
