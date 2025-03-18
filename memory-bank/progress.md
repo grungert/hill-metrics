@@ -103,7 +103,8 @@ The project is in the early implementation phase. The following has been complet
 #### UI Components
 - [x] Implement main layout and navigation
 - [x] Create search bar component
-- [x] Create filter panels
+- [x] Create filter panels with hierarchical structure and collapsible categories
+- [x] Implement asset-specific filters for different financial instruments
 - [x] Implement results board
 - [ ] Create instrument details view
 - [ ] Implement comparison tools
@@ -208,6 +209,9 @@ As the project is in the initialization phase, there are no known implementation
 | 2025-03-17 | Implemented initial UI components (SearchBar, FilterPanel) |
 | 2025-03-18 | Updated progress tracking |
 | 2025-03-18 | Implemented search page with Header, FilterBar, and DataTable components |
+| 2025-03-18 | Enhanced asset filter functionality with hierarchical structure and collapsible categories |
+| 2025-03-18 | Implemented specific filters for each asset type (Cryptocurrency, Mutual Funds, etc.) |
+| 2025-03-18 | Improved filter panel UI with better styling and interaction |
 
 ## Next Actions
 
