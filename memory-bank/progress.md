@@ -214,6 +214,8 @@ As the project is in the initialization phase, there are no known implementation
 | 2025-03-18 | Improved filter panel UI with better styling and interaction |
 | 2025-03-18 | Implemented sector filter with hierarchical structure and proper parent-child relationships |
 | 2025-03-18 | Fixed duplicate entries in filter hierarchies |
+| 2025-03-18 | Redesigned Most Used filter with advanced filtering options (return criteria, risk indicators) |
+| 2025-03-18 | Implemented visual slider selection with color-coded indicators for risk levels |
 
 ## Next Actions
 

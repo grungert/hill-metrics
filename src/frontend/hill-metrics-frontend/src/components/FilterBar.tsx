@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import FilterButton from '../ui/FilterButton';
 import FilterPanel from './FilterPanel/FilterPanel';
+import MostUsedFilterPanel from './MostUsedFilterPanel/MostUsedFilterPanel';
 import AdvancedFilterPanel from './AdvancedFilterPanel/AdvancedFilterPanel';
 import { 
   assetFilterOptions, 
@@ -39,7 +40,7 @@ interface FilterBarProps {
 
 const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
   const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
-  const [selectedFilters, setSelectedFilters] = useState<{[key in FilterType]?: number[]}>({});
+  const [selectedFilters, setSelectedFilters] = useState<{[key in FilterType]?: any}>({});
   const [selectedAssetType, setSelectedAssetType] = useState<string>('Cryptocurrency');
   const filterButtonRefs = useRef<{[key in FilterType]?: HTMLDivElement | null}>({});
   const [filterPosition, setFilterPosition] = useState<{top: number, left: number} | null>(null);
@@ -69,16 +70,22 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
     setActiveFilter(null);
   };
 
-  const handleApplyFilters = (filterType: FilterType, selectedIds: number[]) => {
+  const handleApplyFilters = (filterType: FilterType, selectedData: any) => {
     // Update the selected filters
     setSelectedFilters(prev => ({
       ...prev,
-      [filterType]: selectedIds
+      [filterType]: selectedData
     }));
 
     // Call the parent component's onFilterChange callback
     if (onFilterChange) {
-      onFilterChange(filterType, selectedIds);
+      // For most used filter, we pass the entire filter state
+      // For other filters, we pass the selected IDs
+      const dataToPass = filterType === FilterType.MOST_USED 
+        ? selectedData 
+        : selectedData;
+      
+      onFilterChange(filterType, dataToPass);
     }
   };
 
@@ -89,6 +96,41 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
 
   // Get the count of selected filters for a specific filter type
   const getSelectedCount = (filterType: FilterType): number => {
+    if (filterType === FilterType.MOST_USED) {
+      // For Most Used filter, we count active indicators
+      const filters = selectedFilters[filterType];
+      if (!filters) return 0;
+      
+      // Count how many indicators are set to non-default values
+      let count = 0;
+      
+      // Check if return criteria is set
+      if (filters.returnCriteria && 
+          (filters.returnCriteria.comparison !== 'Greater than' || 
+           filters.returnCriteria.value !== '10%' || 
+           filters.returnCriteria.period !== '1 year')) {
+        count++;
+      }
+      
+      // Check if risk level is set (default is Very Low)
+      if (filters.riskLevel && filters.riskLevel !== 'Very Low') {
+        count++;
+      }
+      
+      // Check if liquidity level is set (default is Very High)
+      if (filters.liquidityLevel && filters.liquidityLevel !== 'Very High') {
+        count++;
+      }
+      
+      // Check if marketcap level is set (default is Very High)
+      if (filters.marketcapLevel && filters.marketcapLevel !== 'Very High') {
+        count++;
+      }
+      
+      return count;
+    }
+    
+    // For other filter types, just count the array length
     return selectedFilters[filterType]?.length || 0;
   };
 
@@ -203,13 +245,11 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
 
       {/* Most Used Filter Panel */}
       {activeFilter === FilterType.MOST_USED && filterPosition && (
-        <FilterPanel
-          title="Most Used"
-          options={mostUsedFilterOptions}
+        <MostUsedFilterPanel
           isOpen={true}
           onClose={handleFilterClose}
-          onApplyFilters={(selectedIds) => handleApplyFilters(FilterType.MOST_USED, selectedIds)}
-          initialSelectedIds={selectedFilters[FilterType.MOST_USED] || []}
+          onApplyFilters={(filters) => handleApplyFilters(FilterType.MOST_USED, filters)}
+          initialFilters={selectedFilters[FilterType.MOST_USED]}
           position={filterPosition}
         />
       )}

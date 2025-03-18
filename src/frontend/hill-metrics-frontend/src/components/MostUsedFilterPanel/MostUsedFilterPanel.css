@@ -1,0 +1,193 @@
+.most-used-filter-panel {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 350px;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.filter-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.toggle-icon {
+  font-size: 14px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.filter-content {
+  padding: 16px;
+}
+
+/* Return criteria styles */
+.return-criteria {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.comparison-select,
+.period-select {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.value-input {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 60px;
+  text-align: center;
+}
+
+/* Level selector styles */
+.level-selector {
+  margin-bottom: 24px;
+}
+
+.level-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.level-value {
+  font-weight: 600;
+}
+
+.level-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 24px;
+  position: relative;
+}
+
+.level-options::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, #10b981, #fbbf24, #ef4444);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.level-option {
+  position: relative;
+  z-index: 1;
+}
+
+.level-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.level-checkbox.selected {
+  background-color: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.level-checkbox.selected svg {
+  width: 16px;
+  height: 16px;
+}
+
+.level-option:nth-child(3) .level-checkbox.selected {
+  background-color: #fbbf24;
+  border-color: #fbbf24;
+}
+
+.level-option:nth-child(4) .level-checkbox.selected,
+.level-option:nth-child(5) .level-checkbox.selected {
+  background-color: #ef4444;
+  border-color: #ef4444;
+}
+
+.level-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.level-label-left {
+  color: #10b981;
+}
+
+.level-label-center {
+  color: #fbbf24;
+}
+
+.level-label-right {
+  color: #ef4444;
+}
+
+/* Button styles */
+.filter-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cancel-button,
+.apply-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cancel-button {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+.apply-button {
+  background-color: #0f172a;
+  border: 1px solid #0f172a;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #f1f5f9;
+}
+
+.apply-button:hover {
+  background-color: #1e293b;
+}

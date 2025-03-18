@@ -37,6 +37,10 @@ The project has made significant progress in the initialization phase:
      - Added collapsible filter panels with expand/collapse functionality
      - Created specific filters for each asset type (Cryptocurrency, Mutual Funds, etc.)
      - Implemented sector filter with hierarchical structure and proper parent-child relationships
+     - Redesigned Most Used filter with advanced filtering options:
+       - Return criteria with comparison operators and time periods
+       - Risk, Liquidity, and Marketcap indicators with visual slider selection
+       - Color-coded indicators (green for low risk, yellow for moderate, red for high)
      - Fixed duplicate entries in filter hierarchies
      - Improved filter panel UI with better styling and interaction
 
