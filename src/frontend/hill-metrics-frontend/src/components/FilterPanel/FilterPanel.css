@@ -1,0 +1,135 @@
+.filter-panel {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+.filter-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.toggle-icon {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.filter-content {
+  padding: 1rem;
+}
+
+.filter-search {
+  margin-bottom: 1rem;
+}
+
+.filter-search input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.select-all,
+.clear-all {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0;
+}
+
+.select-all:hover,
+.clear-all:hover {
+  text-decoration: underline;
+}
+
+.filter-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.filter-option {
+  margin-bottom: 0.5rem;
+}
+
+.option-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.option-label input {
+  margin-right: 0.5rem;
+}
+
+.nested-options {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.cancel-button,
+.apply-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  color: #495057;
+}
+
+.apply-button {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #e9ecef;
+}
+
+.apply-button:hover {
+  background-color: #0069d9;
+}
