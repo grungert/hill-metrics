@@ -209,6 +209,12 @@ flowchart TD
 - **Implementation**: React's state management (Redux/Zustand) for UI updates.
 - **Benefits**: Loose coupling between components, efficient updates when data changes.
 
+### 8. Refs and Imperative Handle Pattern
+- **Purpose**: Provides a way to access and interact with DOM elements or React components imperatively.
+- **Implementation**: Using React's `useRef`, `forwardRef`, and `useImperativeHandle` hooks to expose component methods.
+- **Benefits**: Enables bidirectional communication between components, allows parent components to call methods on child components.
+- **Example**: Filter pills and filter state synchronization, where removing a filter pill updates the underlying filter state.
+
 ## Data Flow
 
 ```mermaid

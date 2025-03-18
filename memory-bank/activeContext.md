@@ -43,6 +43,7 @@ The project has made significant progress in the initialization phase:
        - Color-coded indicators (green for low risk, yellow for moderate, red for high)
      - Fixed duplicate entries in filter hierarchies
      - Improved filter panel UI with better styling and interaction
+     - Implemented bidirectional filter updates: closing filter pills now updates the underlying filter state
 
 
 ## Next Steps
