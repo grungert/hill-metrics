@@ -32,10 +32,12 @@ The project has made significant progress in the initialization phase:
      - Empty state for no results
    - Created search page with sample data
    - Implemented CSS styling for all components
-   - Enhanced asset filter functionality:
+   - Enhanced filter functionality:
      - Implemented hierarchical structure for asset categories and subcategories
      - Added collapsible filter panels with expand/collapse functionality
      - Created specific filters for each asset type (Cryptocurrency, Mutual Funds, etc.)
+     - Implemented sector filter with hierarchical structure and proper parent-child relationships
+     - Fixed duplicate entries in filter hierarchies
      - Improved filter panel UI with better styling and interaction
 
 

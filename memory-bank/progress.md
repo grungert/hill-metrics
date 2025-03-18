@@ -212,6 +212,8 @@ As the project is in the initialization phase, there are no known implementation
 | 2025-03-18 | Enhanced asset filter functionality with hierarchical structure and collapsible categories |
 | 2025-03-18 | Implemented specific filters for each asset type (Cryptocurrency, Mutual Funds, etc.) |
 | 2025-03-18 | Improved filter panel UI with better styling and interaction |
+| 2025-03-18 | Implemented sector filter with hierarchical structure and proper parent-child relationships |
+| 2025-03-18 | Fixed duplicate entries in filter hierarchies |
 
 ## Next Actions
 
