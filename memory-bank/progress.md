@@ -218,6 +218,7 @@ As the project is in the initialization phase, there are no known implementation
 | 2025-03-18 | Implemented visual slider selection with color-coded indicators for risk levels |
 | 2025-03-18 | Implemented bidirectional filter updates: closing filter pills now updates the underlying filter state |
 | 2025-03-19 | Added column visibility and reordering functionality to DataTable with drag-and-drop interface |
+| 2025-03-19 | Implemented routing with React Router for navigation between Search and Comparison pages |
 
 ## Next Actions
 

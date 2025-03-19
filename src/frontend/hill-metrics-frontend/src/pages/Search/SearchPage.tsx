@@ -7,7 +7,6 @@ import { TableColumn, AssetItem } from '../../types/dashboard';
 import { FilterType, FilterItem } from '../../types/filters';
 
 const SearchPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'search' | 'comparison'>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Record<string, number[]>>({});
   const [selectedFilterPills, setSelectedFilterPills] = useState<FilterItem[]>([]);
@@ -91,9 +90,7 @@ const SearchPage: React.FC = () => {
     { id: 'date', label: 'Date', flex: true, visible: true, order: 10 },
   ];
 
-  const handleTabChange = (tab: 'search' | 'comparison') => {
-    setActiveTab(tab);
-  };
+  // Tab change is now handled by the router in the Header component
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -173,8 +170,6 @@ const SearchPage: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header 
-        activeTab={activeTab} 
-        onTabChange={handleTabChange} 
         onSearch={handleSearch}
       />
       <div className="flex flex-col flex-1 bg-slate-50">

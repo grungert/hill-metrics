@@ -1,17 +1,34 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SearchInput from '../ui/SearchInput';
 
 interface HeaderProps {
-  activeTab: 'search' | 'comparison';
-  onTabChange: (tab: 'search' | 'comparison') => void;
+  activeTab?: 'search' | 'comparison'; // Optional as we'll determine from route
+  onTabChange?: (tab: 'search' | 'comparison') => void; // Optional as we'll use router
   onSearch?: (query: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
-  activeTab, 
+  activeTab: propActiveTab, 
   onTabChange,
   onSearch
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Determine active tab from route if not provided in props
+  const activeTab = propActiveTab || 
+    (location.pathname.includes('comparison') ? 'comparison' : 'search');
+  
+  // Handle tab change with router navigation
+  const handleTabChange = (tab: 'search' | 'comparison') => {
+    if (onTabChange) {
+      onTabChange(tab);
+    }
+    
+    // Navigate to the appropriate route
+    navigate(tab === 'search' ? '/search' : '/comparison');
+  };
   return (
     <header className="flex w-full h-14 justify-between items-center border border-slate-200 bg-white px-8">
       <div className="flex items-center gap-8">
@@ -29,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({
                 ? 'text-slate-900 bg-slate-100'
                 : 'text-slate-500'
             }`}
-            onClick={() => onTabChange('search')}
+            onClick={() => handleTabChange('search')}
           >
             Search
           </div>
@@ -39,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({
                 ? 'text-slate-900 bg-slate-100'
                 : 'text-slate-500'
             }`}
-            onClick={() => onTabChange('comparison')}
+            onClick={() => handleTabChange('comparison')}
           >
             Comparison
           </div>

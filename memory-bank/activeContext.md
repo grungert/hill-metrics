@@ -49,6 +49,11 @@ The project has made significant progress in the initialization phase:
        - Columns can be reordered using drag-and-drop
        - Name column is always visible (cannot be hidden)
        - Column state persists during the session
+     - Implemented routing with React Router:
+       - Added navigation between Search and Comparison pages
+       - Created a basic Comparison page with the same Header component
+       - Updated Header component to use React Router for navigation
+       - Configured default route to redirect to Search page
 
 
 ## Next Steps

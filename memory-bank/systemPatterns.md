@@ -227,6 +227,71 @@ flowchart TD
 - **Benefits**: Preserves user preferences and configurations during a session, improves user experience by maintaining customizations.
 - **Example**: Column visibility and order settings in the DataTable component, which persist even after other UI interactions.
 
+### 11. Routing Pattern
+- **Purpose**: Manages navigation between different views/pages in a single-page application.
+- **Implementation**: Using React Router with declarative routes and navigation hooks.
+- **Benefits**: Enables bookmarkable URLs, browser history integration, and code-splitting based on routes.
+- **Example**: Navigation between Search and Comparison pages, with the Header component using the router for tab switching.
+
+## Frontend Routing Implementation
+
+```mermaid
+flowchart TD
+    subgraph "Routing Architecture"
+        Router[React Router Provider]
+        Routes[Route Definitions]
+        Nav[Navigation Components]
+        Pages[Page Components]
+        
+        Router --> Routes
+        Routes --> Pages
+        Nav --> Router
+    end
+    
+    subgraph "Route Definitions"
+        Root[Root Route]
+        Search[Search Route]
+        Comparison[Comparison Route]
+        
+        Root --> Search
+        Root --> Comparison
+    end
+    
+    subgraph "Navigation Flow"
+        User[User]
+        Header[Header Component]
+        URL[URL/Browser]
+        
+        User -->|Clicks Tab| Header
+        Header -->|useNavigate| URL
+        URL -->|Updates Route| Router
+        Router -->|Renders| Pages
+    end
+```
+
+The application uses React Router v7 for client-side routing with the following implementation:
+
+1. **Route Configuration**:
+   - Routes are defined in the App component using `createBrowserRouter`
+   - Default route (`/`) redirects to the Search page
+   - Dedicated routes for Search (`/search`) and Comparison (`/comparison`) pages
+
+2. **Navigation Components**:
+   - Header component handles navigation between tabs
+   - Uses `useNavigate` hook for programmatic navigation
+   - Uses `useLocation` hook to determine the active tab based on the current route
+
+3. **Page Components**:
+   - Each route renders a specific page component (SearchPage, ComparisonPage)
+   - Pages are lazy-loaded for better performance (code splitting)
+   - Common components (like Header) are shared between pages
+
+4. **Navigation Flow**:
+   - User clicks on a tab in the Header
+   - Header component navigates to the corresponding route
+   - Router renders the appropriate page component
+   - URL is updated to reflect the current page
+
 ## Data Flow
 
 ```mermaid
@@ -304,6 +369,14 @@ sequenceDiagram
   - Good performance for moderate-sized datasets
   - Supports advanced text search features
   - Simplifies infrastructure requirements
+
+### 7. Routing Implementation
+- **Decision**: React Router v7 with declarative routes
+- **Rationale**:
+  - Modern API with hooks support
+  - Declarative route definitions
+  - Support for nested routes and layouts
+  - Integration with browser history API
 
 ## Performance Considerations
 
