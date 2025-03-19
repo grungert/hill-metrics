@@ -1,45 +1,41 @@
-import React from 'react';
-import SearchInput from '../ui/SearchInput';
+import React from "react";
+import SearchInput from "../ui/SearchInput";
 
 interface HeaderProps {
-  activeTab: 'search' | 'comparison';
-  onTabChange: (tab: 'search' | 'comparison') => void;
-  onSearch?: (query: string) => void;
+  activeTab: "search" | "comparison";
+  onTabChange: (tab: "search" | "comparison") => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ 
-  activeTab, 
-  onTabChange,
-  onSearch
-}) => {
+const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
   return (
     <header className="flex w-full h-14 justify-between items-center border border-slate-200 bg-white px-8">
       <div className="flex items-center gap-8">
-        <div className="flex justify-center items-center">
-          {/* "M" logo */}
-          <svg width="37" height="24" viewBox="0 0 37 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.839 0.00012207L36.0714 23.9999H28.7456L19.8549 7.90632L10.9642 23.9999H3.63837L16.8708 0.00012207H22.839Z" fill="#0F172A"/>
-            <path d="M0 24.0001L13.2324 0.000244141H19.2006L5.96819 24.0001H0Z" fill="#0F172A"/>
-          </svg>
+        <div className="flex w-8 h-8 justify-center items-center">
+          {/* Logo placeholder - replace with actual logo */}
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d83d02e276baeb125e7cde3aef6b947603b4b5c3"
+            alt="Company Logo"
+            className="w-[139px] h-[32px] mix-blend-[luminosity] -ml-[41px] -mt-[3px]"
+          />
         </div>
         <div className="flex items-center gap-2">
           <div
             className={`text-sm leading-6 gap-2 rounded px-4 py-1 cursor-pointer ${
-              activeTab === 'search'
-                ? 'text-slate-900 bg-slate-100'
-                : 'text-slate-500'
+              activeTab === "search"
+                ? "text-slate-900 bg-slate-100"
+                : "text-slate-500"
             }`}
-            onClick={() => onTabChange('search')}
+            onClick={() => onTabChange("search")}
           >
             Search
           </div>
           <div
             className={`text-sm leading-6 gap-2 rounded px-4 py-1 cursor-pointer ${
-              activeTab === 'comparison'
-                ? 'text-slate-900 bg-slate-100'
-                : 'text-slate-500'
+              activeTab === "comparison"
+                ? "text-slate-900 bg-slate-100"
+                : "text-slate-500"
             }`}
-            onClick={() => onTabChange('comparison')}
+            onClick={() => onTabChange("comparison")}
           >
             Comparison
           </div>
@@ -50,7 +46,6 @@ const Header: React.FC<HeaderProps> = ({
           placeholder="Search for assets..."
           shortcut="⌘K"
           className="w-[338px]"
-          onSearch={onSearch}
         />
         <div className="flex items-center gap-4">
           <div className="flex w-8 h-8 justify-center items-center rounded cursor-pointer">

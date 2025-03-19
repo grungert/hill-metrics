@@ -15,7 +15,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
 }) => {
   return (
     <button
-      className={`flex items-center gap-2 rounded border border-slate-300 bg-white px-3 py-1.5 text-sm ${
+      className={`flex items-center gap-2 rounded border border-slate-200 bg-white px-3 py-1.5 text-sm ${
         isActive ? 'bg-slate-100 text-slate-900' : 'text-slate-600'
       } ${className}`}
       onClick={onClick}

@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import EmptyState from './EmptyState';
-import { TableColumn } from '../types/dashboard';
-import { downloadFile, convertToCSV } from '../utils/fileDownload';
+import React from "react";
+import EmptyState from "./EmptyState";
+import { TableColumn } from "../../types/dashboard";
+import { downloadFile, convertToCSV } from "../../utils/fileDownload";
 
 interface DataTableProps {
   columns: TableColumn[];
   data: any[];
   isLoading?: boolean;
-  onRowSelect?: (id: string | number, selected: boolean) => void;
+  onRowSelect?: (id: string, selected: boolean) => void;
   onSearch?: (query: string) => void;
 }
 
@@ -18,37 +18,6 @@ const DataTable: React.FC<DataTableProps> = ({
   onRowSelect,
   onSearch,
 }) => {
-  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const downloadRef = useRef<HTMLDivElement>(null);
-
-  // Handle click outside to close dropdown
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (downloadRef.current && !downloadRef.current.contains(event.target as Node)) {
-        setIsDownloadOpen(false);
-      }
-    }
-
-    // Handle escape key to close dropdown
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setIsDownloadOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
-    
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  const toggleDownloadDropdown = () => {
-    setIsDownloadOpen(!isDownloadOpen);
-  };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onSearch) {
       onSearch(e.target.value);
@@ -57,7 +26,7 @@ const DataTable: React.FC<DataTableProps> = ({
 
   const handleColumnToggle = () => {
     // In a real application, this would open a dropdown to select columns
-    console.log('Toggle columns');
+    console.log("Toggle columns");
   };
 
   const handleDownloadJSON = () => {
@@ -73,7 +42,6 @@ const DataTable: React.FC<DataTableProps> = ({
     
     const jsonContent = JSON.stringify(dataToDownload, null, 2);
     downloadFile(jsonContent, 'dashboard-data.json', 'application/json');
-    setIsDownloadOpen(false);
   };
 
   const handleDownloadCSV = () => {
@@ -89,51 +57,6 @@ const DataTable: React.FC<DataTableProps> = ({
     
     const csvContent = convertToCSV(dataToDownload);
     downloadFile(csvContent, 'dashboard-data.csv', 'text/csv;charset=utf-8;');
-    setIsDownloadOpen(false);
-  };
-
-  // Render star rating
-  const renderRating = (rating: number) => {
-    const stars = [];
-    const maxStars = 5;
-    
-    for (let i = 1; i <= maxStars; i++) {
-      stars.push(
-        <svg 
-          key={i}
-          width="16" 
-          height="16" 
-          viewBox="0 0 16 16" 
-          fill={i <= rating ? "#64738b" : "none"} 
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path 
-            d="M8 1.33334L10.06 5.50668L14.6667 6.18001L11.3333 9.42668L12.12 14.0133L8 11.8467L3.88 14.0133L4.66667 9.42668L1.33334 6.18001L5.94 5.50668L8 1.33334Z" 
-            stroke={i <= rating ? "#64738b" : "#CBD5E1"} 
-            strokeWidth="1.33333" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    }
-    
-    return <div className="flex items-center gap-1">{stars}</div>;
-  };
-
-  // Format percentage values
-  const formatPercentage = (value: number) => {
-    return `${value.toFixed(2)}%`;
-  };
-
-  // Format date values
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).replace(/\//g, '-');
   };
 
   return (
@@ -148,7 +71,7 @@ const DataTable: React.FC<DataTableProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex w-[212px] h-9 items-center rounded border border-slate-200 bg-white px-2 py-2.5">
+          <div className="flex w-[212px] h-9 items-center rounded border border-slate-300 bg-white px-2 py-2.5">
             <div className="flex items-center flex-1">
               <div className="flex items-center gap-2 flex-1">
                 <div>
@@ -186,7 +109,7 @@ const DataTable: React.FC<DataTableProps> = ({
           </div>
           <div className="flex items-center gap-2">
             <div
-              className="flex items-center gap-2 rounded border border-slate-200 bg-white px-3 py-1.5 cursor-pointer"
+              className="flex items-center gap-2 rounded border border-slate-300 bg-white px-3 py-1.5 cursor-pointer"
               onClick={handleColumnToggle}
             >
               <div className="text-slate-900 text-sm leading-6">Columns</div>
@@ -209,10 +132,9 @@ const DataTable: React.FC<DataTableProps> = ({
               </div>
             </div>
             
-            <div className="relative" ref={downloadRef}>
+            <div className="relative group">
               <div
-                className="flex items-center gap-2 rounded border border-slate-200 bg-white px-3 py-1.5 cursor-pointer"
-                onClick={toggleDownloadDropdown}
+                className="flex items-center gap-2 rounded border border-slate-300 bg-white px-3 py-1.5 cursor-pointer"
               >
                 <svg
                   width="16"
@@ -260,83 +182,71 @@ const DataTable: React.FC<DataTableProps> = ({
                 </svg>
               </div>
               
-              {isDownloadOpen && (
-                <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 shadow-md rounded-md z-10">
-                  <div 
-                    className="px-4 py-2 text-sm text-slate-800 hover:bg-slate-50 cursor-pointer"
-                    onClick={handleDownloadJSON}
-                  >
-                    JSON
-                  </div>
-                  <div 
-                    className="px-4 py-2 text-sm text-slate-800 hover:bg-slate-50 cursor-pointer"
-                    onClick={handleDownloadCSV}
-                  >
-                    CSV
-                  </div>
+              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 shadow-md rounded-md z-10 hidden group-hover:block">
+                <div 
+                  className="px-4 py-2 text-sm text-slate-800 hover:bg-slate-50 cursor-pointer"
+                  onClick={handleDownloadJSON}
+                >
+                  JSON
                 </div>
-              )}
+                <div 
+                  className="px-4 py-2 text-sm text-slate-800 hover:bg-slate-50 cursor-pointer"
+                  onClick={handleDownloadCSV}
+                >
+                  CSV
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col flex-1 rounded border border-slate-200 overflow-hidden">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-white border-bottom">
-              <th className="w-10 p-3 text-left border-b border-slate-200 border-bottom">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 border border-slate-300 bg-white rounded-sm"
-                  onChange={(e) => {
-                    // In a real application, this would select all rows
-                    console.log("Select all:", e.target.checked);
-                  }}
-                />
-              </th>
-              {columns.map((column) => (
-                <th
-                  key={column.id}
-                  className={`p-3 text-left border-b border-slate-200 border-bottom ${
-                    column.width
-                      ? `w-[${column.width}]`
-                      : column.flex
-                        ? "w-full"
-                        : ""
-                  }`}
-                >
-                  <div className="text-slate-900 text-xs font-bold leading-4">
-                    {column.label}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
+      <div className="flex flex-col flex-1 rounded border border-slate-200">
+        <div className="flex flex-col flex-1">
+          <div className="flex border border-slate-100 bg-white">
+            <div className="flex items-start gap-2 border border-slate-100 p-3">
+              <input
+                type="checkbox"
+                className="w-4 h-4 border border-slate-300 bg-white rounded-sm"
+                onChange={(e) => {
+                  // In a real application, this would select all rows
+                  console.log("Select all:", e.target.checked);
+                }}
+              />
+            </div>
+            {columns.map((column) => (
+              <div
+                key={column.id}
+                className={`text-slate-900 text-xs font-bold leading-4 ${
+                  column.width
+                    ? `w-[${column.width}]`
+                    : column.flex
+                      ? "flex-1"
+                      : ""
+                } gap-2 border border-slate-100 p-3`}
+              >
+                {column.label}
+              </div>
+            ))}
+          </div>
 
           {data.length === 0 ? (
-            <tbody>
-              <tr>
-                <td colSpan={columns.length + 1} className="p-8 text-center">
-                  <EmptyState
-                    message={
-                      <>
-                        <span className="font-bold text-lg">Nothing to show.</span>
-                        <span> Please update your filters.</span>
-                      </>
-                    }
-                  />
-                </td>
-              </tr>
-            </tbody>
+            <EmptyState
+              message={
+                <>
+                  <span className="font-bold text-lg">Nothing to show.</span>
+                  <span> Please update your filters.</span>
+                </>
+              }
+            />
           ) : (
-            <tbody>
+            <div className="flex-1 bg-white">
               {data.map((row, rowIndex) => (
-                <tr
+                <div
                   key={row.id || rowIndex}
-                  className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-500'}
+                  className="flex border-b border-slate-100"
                 >
-                  <td className="p-3 border-b border-slate-200 ç">
+                  <div className="flex items-center gap-2 border-r border-slate-100 p-3">
                     <input
                       type="checkbox"
                       className="w-4 h-4 border border-slate-300 bg-white rounded-sm"
@@ -346,44 +256,30 @@ const DataTable: React.FC<DataTableProps> = ({
                         }
                       }}
                     />
-                  </td>
+                  </div>
                   {columns.map((column) => (
-                    <td
+                    <div
                       key={`${row.id}-${column.id}`}
-                      className={`p-3 border-b border-slate-200 text-slate-700 text-sm leading-5 ${
-                        column.id === "ytdPercentage" || column.id === "oneYearPercentage" || column.id === "threeYearPercentage" || column.id === "date"
-                          ? "text-right"
-                          : column.id === "risk" || column.id === "pricing" || column.id === "currency"
-                            ? "text-center"
+                      className={`text-slate-700 text-sm leading-5 ${
+                        column.width
+                          ? `w-[${column.width}]`
+                          : column.flex
+                            ? "flex-1"
                             : ""
-                      }`}
+                      } border-r border-slate-100 p-3`}
                     >
-                      {column.id === "number" ? (
-                        rowIndex + 1
-                      ) : column.id === "rating" ? (
-                        renderRating(row[column.id])
-                      ) : column.id === "ytdPercentage" || column.id === "oneYearPercentage" || column.id === "threeYearPercentage" ? (
-                        formatPercentage(row[column.id])
-                      ) : column.id === "date" ? (
-                        formatDate(row[column.id])
-                      ) : column.id === "risk" ? (
-                        <span className="font-medium">{row[column.id]}</span>
-                      ) : column.id === "pricing" ? (
-                        row[column.id] || "-"
-                      ) : column.id === "currency" ? (
-                        row[column.id]
-                      ) : row[column.id] !== undefined ? (
-                        row[column.id]
-                      ) : (
-                        "-"
-                      )}
-                    </td>
+                      {column.id === "number"
+                        ? rowIndex + 1
+                        : row[column.id] !== undefined
+                          ? row[column.id]
+                          : "-"}
+                    </div>
                   ))}
-                </tr>
+                </div>
               ))}
-            </tbody>
+            </div>
           )}
-        </table>
+        </div>
 
         <div className="flex justify-center items-center bg-white px-3 py-2">
           <div className="flex items-center gap-4">
@@ -416,7 +312,7 @@ const DataTable: React.FC<DataTableProps> = ({
               </svg>
             </button>
             <div className="flex justify-center items-center">
-              <div className="flex items-center justify-center text-white text-xs leading-4 w-7 h-7 bg-slate-900 rounded-md">
+              <div className="text-slate-100 text-xs leading-4 w-7 h-7 gap-2 bg-slate-900 p-2 rounded-md">
                 1
               </div>
             </div>
@@ -447,4 +343,4 @@ const DataTable: React.FC<DataTableProps> = ({
   );
 };
 
-export default DataTable;
+export default DataTable

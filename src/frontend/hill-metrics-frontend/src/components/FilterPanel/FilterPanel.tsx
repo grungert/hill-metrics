@@ -7,7 +7,7 @@ interface FilterPanelProps {
   options: FilterOption[];
   isOpen: boolean;
   onClose: () => void;
-  onApplyFilters: (selectedIds: number[]) => void;
+  onApplyFilters: (selectedIds: number[], selectedOptions: FilterOption[]) => void;
   initialSelectedIds?: number[];
   position?: { top: number; left: number };
 }
@@ -76,7 +76,9 @@ const FilterPanel = ({
   };
 
   const handleApply = () => {
-    onApplyFilters(selectedOptions);
+    // Get the selected option objects to pass to the parent
+    const selectedOptionObjects = options.filter(option => selectedOptions.includes(option.id));
+    onApplyFilters(selectedOptions, selectedOptionObjects);
     onClose();
   };
 

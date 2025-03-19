@@ -88,7 +88,7 @@ const SearchPage: React.FC = () => {
     { id: 'ytdPercentage', label: 'YTD %', width: '100px' },
     { id: 'oneYearPercentage', label: '1-Year %', width: '200px' },
     { id: 'threeYearPercentage', label: '3-Year %', width: '200px' },
-    { id: 'date', label: 'Date', width: '220px' },
+    { id: 'date', label: 'Date', flex: true },
   ];
 
   const handleTabChange = (tab: 'search' | 'comparison') => {

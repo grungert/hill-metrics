@@ -1,18 +1,14 @@
-import React from 'react';
+import React from "react";
 
 interface EmptyStateProps {
   message: React.ReactNode;
-  icon?: React.ReactNode;
 }
 
-const EmptyState: React.FC<EmptyStateProps> = ({ 
-  message, 
-  icon 
-}) => {
+const EmptyState: React.FC<EmptyStateProps> = ({ message }) => {
   return (
-    <div className="flex flex-col justify-center items-center flex-1 bg-white py-20">
-      <div className="flex flex-col items-center">
-        {icon || (
+    <div className="flex flex-col justify-center items-center flex-1 bg-white">
+      <div className="flex flex-col items-center w-[196px]">
+        <div>
           <svg
             width="150"
             height="151"
@@ -72,8 +68,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({
               fill="#1A1A1A"
             />
           </svg>
-        )}
-        <div className="text-slate-800 text-center text-base leading-6 mt-6">
+        </div>
+        <div className="text-slate-800 text-center text-base leading-6">
           {message}
         </div>
       </div>

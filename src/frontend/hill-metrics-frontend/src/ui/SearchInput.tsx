@@ -28,7 +28,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <form 
-      className={`flex items-center gap-2 rounded border border-slate-300 bg-white px-3 py-2 ${className}`}
+      className={`flex items-center gap-2 rounded-md bg-white px-3 py-1.5 ${className}`}
       onSubmit={handleSubmit}
     >
       <svg
@@ -58,10 +58,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
         placeholder={placeholder}
         value={query}
         onChange={handleChange}
-        className="flex-1 border-none outline-none text-sm text-slate-800"
+        className="flex-1 border-none outline-none text-sm text-slate-600"
       />
       {shortcut && (
-        <div className="flex items-center justify-center rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500">
+        <div className="flex items-center justify-center rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500 font-mono">
           {shortcut}
         </div>
       )}
