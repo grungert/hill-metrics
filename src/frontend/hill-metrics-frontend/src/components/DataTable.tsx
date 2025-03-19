@@ -193,7 +193,7 @@ const DataTable: React.FC<DataTableProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex w-[212px] h-9 items-center rounded border border-slate-200 bg-white px-2 py-2.5">
+          <div className="flex w-[212px] h-9 items-center rounded px-2 py-2.5">
             <div className="flex items-center flex-1">
               <div className="flex items-center gap-2 flex-1">
                 <div>
@@ -458,7 +458,7 @@ const DataTable: React.FC<DataTableProps> = ({
           <div className="flex-1" />
           <div className="flex justify-center items-center gap-2">
             <button
-              className="flex justify-center items-center gap-2 bg-white p-1.5 rounded-lg disabled:opacity-50"
+              className="flex justify-center items-center gap-2 bg-white p-1.5 rounded-lg disabled:opacity-50 border-style"
               disabled={data.length === 0}
             >
               <svg
@@ -478,12 +478,12 @@ const DataTable: React.FC<DataTableProps> = ({
               </svg>
             </button>
             <div className="flex justify-center items-center">
-              <div className="flex items-center justify-center text-white text-xs leading-4 w-7 h-7 bg-slate-900 rounded-md">
+              <div className="flex items-center justify-center text-white text-xs pag-pedding leading-4 w-7 h-7 bg-slate-900 rounded-md">
                 1
               </div>
             </div>
             <button
-              className="flex justify-center items-center gap-2 bg-white pl-2 pr-0 py-1.5 rounded-lg disabled:opacity-50"
+              className="flex justify-center items-center gap-2 bg-white pl-2 pr-0 py-1.5 rounded-lg disabled:opacity-50 border-style"
               disabled={data.length === 0}
             >
               <svg
