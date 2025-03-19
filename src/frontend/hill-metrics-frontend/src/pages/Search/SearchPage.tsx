@@ -78,17 +78,17 @@ const SearchPage: React.FC = () => {
 
   // Define table columns
   const columns: TableColumn[] = [
-    { id: 'number', label: '#', width: '10' },
-    { id: 'name', label: 'Name', flex: true },
-    { id: 'category', label: 'Category', width: '305px' },
-    { id: 'pricing', label: 'Pricing', width: '120px' },
-    { id: 'currency', label: 'Currency', width: '120px' },
-    { id: 'rating', label: 'Rating', width: '140px' },
-    { id: 'risk', label: 'Risk', width: '80px' },
-    { id: 'ytdPercentage', label: 'YTD %', width: '100px' },
-    { id: 'oneYearPercentage', label: '1-Year %', width: '200px' },
-    { id: 'threeYearPercentage', label: '3-Year %', width: '200px' },
-    { id: 'date', label: 'Date', flex: true },
+    { id: 'number', label: '#', width: '10', visible: true, order: 0 },
+    { id: 'name', label: 'Name', flex: true, visible: true, order: 1, canHide: false },
+    { id: 'category', label: 'Category', width: '305px', visible: true, order: 2 },
+    { id: 'pricing', label: 'Pricing', width: '120px', visible: true, order: 3 },
+    { id: 'currency', label: 'Currency', width: '120px', visible: true, order: 4 },
+    { id: 'rating', label: 'Rating', width: '140px', visible: true, order: 5 },
+    { id: 'risk', label: 'Risk', width: '80px', visible: true, order: 6 },
+    { id: 'ytdPercentage', label: 'YTD %', width: '100px', visible: true, order: 7 },
+    { id: 'oneYearPercentage', label: '1-Year %', width: '200px', visible: true, order: 8 },
+    { id: 'threeYearPercentage', label: '3-Year %', width: '200px', visible: true, order: 9 },
+    { id: 'date', label: 'Date', flex: true, visible: true, order: 10 },
   ];
 
   const handleTabChange = (tab: 'search' | 'comparison') => {

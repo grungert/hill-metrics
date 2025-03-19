@@ -3,6 +3,9 @@ export interface TableColumn {
   label: string;
   width?: string;
   flex?: boolean;
+  visible?: boolean;
+  order?: number;
+  canHide?: boolean;
 }
 
 export interface AssetItem {

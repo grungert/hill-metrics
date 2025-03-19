@@ -215,6 +215,18 @@ flowchart TD
 - **Benefits**: Enables bidirectional communication between components, allows parent components to call methods on child components.
 - **Example**: Filter pills and filter state synchronization, where removing a filter pill updates the underlying filter state.
 
+### 9. Drag and Drop Pattern
+- **Purpose**: Enables intuitive user interaction for reordering items in a list.
+- **Implementation**: Using HTML5 Drag and Drop API with React event handlers.
+- **Benefits**: Provides a natural way for users to reorganize content, enhances user experience for ordering operations.
+- **Example**: Column reordering in the DataTable component, allowing users to change the order of table columns.
+
+### 10. Component State Persistence Pattern
+- **Purpose**: Maintains component state across renders and user interactions.
+- **Implementation**: Using React's useState hook with functional initializers to set initial state.
+- **Benefits**: Preserves user preferences and configurations during a session, improves user experience by maintaining customizations.
+- **Example**: Column visibility and order settings in the DataTable component, which persist even after other UI interactions.
+
 ## Data Flow
 
 ```mermaid

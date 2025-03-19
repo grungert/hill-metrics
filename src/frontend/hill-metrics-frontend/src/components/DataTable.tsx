@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import EmptyState from './EmptyState';
+import ColumnSelector from './ColumnSelector/ColumnSelector';
 import { TableColumn } from '../types/dashboard';
 import { downloadFile, convertToCSV } from '../utils/fileDownload';
 
@@ -12,14 +13,26 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({
-  columns,
+  columns: initialColumns,
   data,
   isLoading = false,
   onRowSelect,
   onSearch,
 }) => {
+  // Initialize columns with visibility and order properties
+  const [columns, setColumns] = useState<TableColumn[]>(() => 
+    initialColumns.map((col, index) => ({
+      ...col,
+      visible: col.visible === undefined ? true : col.visible,
+      order: col.order === undefined ? index : col.order,
+      canHide: col.id !== 'name' // Name column cannot be hidden
+    }))
+  );
+  
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isColumnSelectorOpen, setIsColumnSelectorOpen] = useState(false);
   const downloadRef = useRef<HTMLDivElement>(null);
+  const columnSelectorRef = useRef<HTMLDivElement>(null);
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -45,8 +58,35 @@ const DataTable: React.FC<DataTableProps> = ({
     };
   }, []);
 
+  // Handle column selector click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (columnSelectorRef.current && !columnSelectorRef.current.contains(event.target as Node)) {
+        setIsColumnSelectorOpen(false);
+      }
+    }
+
+    // Handle escape key to close dropdown
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsColumnSelectorOpen(false);
+      }
+    }
+
+    if (isColumnSelectorOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isColumnSelectorOpen]);
+
   const toggleDownloadDropdown = () => {
     setIsDownloadOpen(!isDownloadOpen);
+    if (isColumnSelectorOpen) setIsColumnSelectorOpen(false);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,9 +95,14 @@ const DataTable: React.FC<DataTableProps> = ({
     }
   };
 
-  const handleColumnToggle = () => {
-    // In a real application, this would open a dropdown to select columns
-    console.log('Toggle columns');
+  const toggleColumnSelector = () => {
+    setIsColumnSelectorOpen(!isColumnSelectorOpen);
+    if (isDownloadOpen) setIsDownloadOpen(false);
+  };
+
+  // Handle column changes from the ColumnSelector
+  const handleColumnChange = (updatedColumns: TableColumn[]) => {
+    setColumns(updatedColumns);
   };
 
   const handleDownloadJSON = () => {
@@ -185,28 +230,39 @@ const DataTable: React.FC<DataTableProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div
-              className="flex items-center gap-2 rounded border border-slate-200 bg-white px-3 py-1.5 cursor-pointer"
-              onClick={handleColumnToggle}
-            >
-              <div className="text-slate-900 text-sm leading-6">Columns</div>
-              <div className="text-slate-900 text-sm leading-6">All</div>
-              <div>
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 4.5L6 7.5L9 4.5"
-                    stroke="#0F172A"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+            <div className="relative" ref={columnSelectorRef}>
+              <div
+                className="flex items-center gap-2 rounded border border-slate-200 bg-white px-3 py-1.5 cursor-pointer"
+                onClick={toggleColumnSelector}
+              >
+                <div className="text-slate-900 text-sm leading-6">Columns</div>
+                <div className="text-slate-900 text-sm leading-6">All</div>
+                <div>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3 4.5L6 7.5L9 4.5"
+                      stroke="#0F172A"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
               </div>
+              
+              {isColumnSelectorOpen && (
+                <ColumnSelector
+                  columns={columns}
+                  onColumnChange={handleColumnChange}
+                  isOpen={isColumnSelectorOpen}
+                  onClose={() => setIsColumnSelectorOpen(false)}
+                />
+              )}
             </div>
             
             <div className="relative" ref={downloadRef}>
@@ -295,7 +351,10 @@ const DataTable: React.FC<DataTableProps> = ({
                   }}
                 />
               </th>
-              {columns.map((column) => (
+              {columns
+                .filter(column => column.visible !== false)
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .map((column) => (
                 <th
                   key={column.id}
                   className={`p-3 text-left border-b border-slate-200 border-bottom ${
@@ -347,7 +406,10 @@ const DataTable: React.FC<DataTableProps> = ({
                       }}
                     />
                   </td>
-                  {columns.map((column) => (
+                  {columns
+                    .filter(column => column.visible !== false)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0))
+                    .map((column) => (
                     <td
                       key={`${row.id}-${column.id}`}
                       className={`p-3 border-b border-slate-200 text-slate-700 text-sm leading-5 ${

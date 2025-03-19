@@ -44,6 +44,11 @@ The project has made significant progress in the initialization phase:
      - Fixed duplicate entries in filter hierarchies
      - Improved filter panel UI with better styling and interaction
      - Implemented bidirectional filter updates: closing filter pills now updates the underlying filter state
+     - Added column visibility and reordering functionality to DataTable:
+       - Users can show/hide columns via dropdown menu
+       - Columns can be reordered using drag-and-drop
+       - Name column is always visible (cannot be hidden)
+       - Column state persists during the session
 
 
 ## Next Steps
