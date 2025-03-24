@@ -65,7 +65,6 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-6">
         <SearchInput
           placeholder="Search for assets..."
-          shortcut="⌘K"
           className="w-[338px]"
           onSearch={onSearch}
         />

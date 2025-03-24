@@ -69,6 +69,46 @@ body {
   border:none
 }
 
+@media (width >= 1024px) {
+  .lg\:flex-row {
+      flex-direction: row;
+  }
+}
+
+.overflow-hidden {
+  overflow:
+hidden;
+}
+
+header {
+  position: sticky;
+  top: 0px;
+}
+
+.gap-4 {
+  gap:
+1rem;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.flex {
+  display: flex
+;
+}
+
+.relative {
+  position: relative;
+}
+
+
+
 .h-14 {
   height: 3.5rem;
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../../components/Header';
+import ComparisonUI from "../../components/Comparison/ComparisonUI";
 
 const ComparisonPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'search' | 'comparison'>('comparison');
@@ -23,13 +24,8 @@ const ComparisonPage: React.FC = () => {
         onTabChange={handleTabChange} 
         onSearch={handleSearch}
       />
-      <div className="flex flex-col flex-1 bg-slate-50 items-center justify-center">
-        <div className="text-2xl font-bold text-slate-700">
-          Comparison Page
-        </div>
-        <div className="text-slate-500 mt-2">
-          This page is under construction
-        </div>
+      <div className="h-screen flex bg-[#f8f9fa] flex-col overflow-hidden">
+        <ComparisonUI />
       </div>
     </div>
   );
