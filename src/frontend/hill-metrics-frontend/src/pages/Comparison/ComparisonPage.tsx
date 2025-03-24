@@ -4,7 +4,7 @@ import ComparisonUI from "../../components/Comparison/ComparisonUI";
 
 const ComparisonPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'search' | 'comparison'>('comparison');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [, setSearchQuery] = useState('');
 
   const handleTabChange = (tab: 'search' | 'comparison') => {
     setActiveTab(tab);
