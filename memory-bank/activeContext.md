@@ -54,6 +54,16 @@ The project has made significant progress in the initialization phase:
        - Created a basic Comparison page with the same Header component
        - Updated Header component to use React Router for navigation
        - Configured default route to redirect to Search page
+     - Implemented Comparison page with advanced features:
+       - Asset list with collapsible panel
+       - Interactive graph visualization using Recharts
+       - Time range selection with custom date picker
+       - Asset visibility toggling
+       - Asset color customization
+     - Resolved CSS framework issues:
+       - Downgraded Tailwind CSS from v4.0.14 to v3.4.17 for better compatibility
+       - Updated PostCSS configuration to work with Tailwind CSS v3
+       - Fixed styling issues throughout the application
 
 
 ## Next Steps

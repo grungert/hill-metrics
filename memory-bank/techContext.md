@@ -6,11 +6,12 @@
 - **Framework**: React
 - **State Management**: Redux/Zustand
 - **Routing**: React Router
+- **CSS Framework**: Tailwind CSS v3.4.17
 - **UI Components**: Custom components with responsive design
-- **Data Visualization**: Chart.js/D3.js for interactive charts and graphs
+- **Data Visualization**: Recharts for interactive charts and graphs
 - **HTTP Client**: Axios for API communication
-- **Build Tools**: Webpack, Babel
-- **Package Manager**: npm/yarn
+- **Build Tools**: Vite
+- **Package Manager**: npm
 
 ### Backend
 - **Framework**: ASP.NET Core Web API
@@ -82,11 +83,11 @@ Database: hill-database
    ```
 3. Start the development server:
    ```bash
-   npm start
+   npm run dev
    # or
-   yarn start
+   yarn dev
    ```
-   The frontend will be available at `http://localhost:3000`
+   The frontend will be available at `http://localhost:5173`
 
 ### Environment Configuration
 
@@ -132,6 +133,26 @@ REACT_APP_API_URL=http://localhost:5000/api
 REACT_APP_AUTH_STORAGE_KEY=hill_metrics_auth
 REACT_APP_VERSION=$npm_package_version
 ```
+
+## CSS Framework Configuration
+
+### Tailwind CSS Setup
+- **Version**: Tailwind CSS v3.4.17 (stable release)
+- **Configuration**: Standard configuration with custom theme extensions
+- **PostCSS Integration**: Using standard PostCSS plugin setup
+- **Plugins**: tailwindcss-animate for animation utilities
+
+### CSS Compatibility Considerations
+- Tailwind CSS v4 was initially attempted but downgraded to v3.4.17 due to compatibility issues
+- The v4 alpha release had breaking changes in the PostCSS plugin architecture
+- Using the module.exports syntax in tailwind.config.js instead of ES module export syntax
+- Custom color palette and animation definitions maintained across versions
+
+### CSS Best Practices
+- Using utility-first approach for component styling
+- Maintaining consistent color variables through Tailwind theme configuration
+- Responsive design implemented using Tailwind's responsive modifiers
+- Custom animations defined in the tailwind.config.js file
 
 ## Technical Constraints
 
@@ -196,36 +217,39 @@ REACT_APP_VERSION=$npm_package_version
 ### Frontend Dependencies
 
 #### Core Framework
-- react
-- react-dom
-- react-router-dom
+- react v19.0.0
+- react-dom v19.0.0
+- react-router-dom v7.3.0
 
 #### State Management
-- redux (or zustand)
-- react-redux
-- redux-thunk (or redux-saga)
+- zustand v5.0.3
+
+#### CSS Framework
+- tailwindcss v3.4.17
+- tailwindcss-animate v1.0.7
+- postcss v8.5.3
+- autoprefixer v10.4.21
 
 #### UI Components
 - Custom component library
-- react-select (for dropdown components)
-- react-datepicker (for date inputs)
+- lucide-react v0.483.0 (for icons)
 
 #### Data Visualization
-- chart.js
-- react-chartjs-2
-- d3 (for advanced visualizations)
+- recharts v2.15.1
+- chart.js v4.4.8
+- react-chartjs-2 v5.3.0
 
 #### HTTP Client
-- axios
+- axios v1.8.3
 
 #### Form Handling
-- formik
-- yup (for validation)
+- formik v2.4.6
+- yup v1.6.1
 
 #### Utilities
-- lodash
-- date-fns (for date manipulation)
-- uuid (for generating unique IDs)
+- lodash v4.17.21
+- date-fns v4.1.0
+- uuid v11.1.0
 
 ## Database Schema Overview
 
