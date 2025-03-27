@@ -10,9 +10,14 @@ We are in the initial phase of the Hill Metrics Financial Screener project. The 
 
 3. **Database Schema Implementation**: Creating the database schema based on the specifications in the database documentation.
 
-4. **Basic API Endpoints**: Implementing the essential API endpoints for retrieving and filtering financial instruments.
+4. **Frontend Expansion**: Building out the application's key pages and features:
+   - Search page functionality (completed)
+   - Comparison page visualization (completed)
+   - Overview page for detailed instrument information (in progress)
 
-5. **Frontend Scaffolding**: Setting up the React application structure with routing and state management.
+5. **Navigation and User Flow**: Implementing intuitive navigation between related pages:
+   - From Search results to detailed Overview page
+   - From Overview to Comparison page
 
 ## Recent Changes
 
@@ -70,19 +75,29 @@ The project has made significant progress in the initialization phase:
 
 ### Immediate Tasks
 
-1. **Backend API Development**:
-   - Set up ASP.NET Core Web API project (when .NET Core is installed)
+1. **Overview Page Implementation**:
+   - Create new page structure for the Overview component
+   - Implement instrument header with price and basic information
+   - Build sidebar navigation for Overview sections
+   - Implement data visualization components:
+     - Performance metrics charts
+     - Category comparison visualization
+     - Similar instruments section
+     - Asset-specific indicators and characteristics 
+   - Set up search-to-overview navigation flow
+
+2. **State Management Setup**:
+   - Implement Zustand for application state management
+   - Create stores for instrument data and user preferences
+   - Set up data flow between Search, Overview, and Comparison pages
+
+3. **Backend API Development** (when .NET Core is installed):
+   - Set up ASP.NET Core Web API project
    - Implement core API controllers for instruments and related entities
    - Set up the repository layer for data access
    - Implement basic filtering and search functionality
 
-2. **Frontend Development**:
-   - Implement instrument details view
-   - Create comparison page
-   - Set up state management with Zustand
-   - Implement API client services
-
-3. **Integration**:
+4. **Integration**:
    - Connect the frontend to the backend API
    - Implement end-to-end workflows
    - Set up error handling and recovery

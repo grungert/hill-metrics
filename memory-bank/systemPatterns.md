@@ -252,20 +252,77 @@ flowchart TD
         Root[Root Route]
         Search[Search Route]
         Comparison[Comparison Route]
+        Overview[Overview Route]
         
         Root --> Search
         Root --> Comparison
+        Root --> Overview
     end
     
     subgraph "Navigation Flow"
         User[User]
         Header[Header Component]
+        SearchResults[Search Results]
         URL[URL/Browser]
         
         User -->|Clicks Tab| Header
+        User -->|Clicks Result| SearchResults
         Header -->|useNavigate| URL
+        SearchResults -->|useNavigate| URL
         URL -->|Updates Route| Router
         Router -->|Renders| Pages
+    end
+```
+
+## Overview Page Component Structure
+
+```mermaid
+flowchart TD
+    subgraph "Overview Page Architecture"
+        OverviewPage[Overview Page Container]
+        
+        subgraph "Layout Components"
+            Header[Header]
+            InstrumentHeader[Instrument Header]
+            Sidebar[Sidebar Navigation]
+            MainContent[Main Content Area]
+        end
+        
+        subgraph "Data Components"
+            PerformanceMetrics[Performance Metrics]
+            Chart[Performance Chart]
+            MetricBars[Metric Indicators]
+            PerformanceRanking[Performance Ranking]
+            CategoryComparison[Category Comparison]
+            AssetMap[Asset Map Visualization]
+            SimilarInstruments[Similar Instruments]
+        end
+        
+        subgraph "Asset-Specific Components"
+            SpecificIndicators[Specific Indicators]
+            SpecificCharacteristics[Specific Characteristics]
+            GeneralCharacteristics[General Characteristics]
+            FeesCharacteristics[Fees & Characteristics]
+        end
+        
+        OverviewPage --> Header
+        OverviewPage --> InstrumentHeader
+        OverviewPage --> Sidebar
+        OverviewPage --> MainContent
+        
+        MainContent --> PerformanceMetrics
+        MainContent --> Chart
+        MainContent --> MetricBars
+        MainContent --> PerformanceRanking
+        MainContent --> CategoryComparison
+        MainContent --> AssetMap
+        MainContent --> SimilarInstruments
+        
+        Sidebar --> SpecificIndicators
+        Sidebar --> SpecificCharacteristics
+        Sidebar --> GeneralCharacteristics
+        
+        MainContent --> FeesCharacteristics
     end
 ```
 
@@ -274,7 +331,8 @@ The application uses React Router v7 for client-side routing with the following 
 1. **Route Configuration**:
    - Routes are defined in the App component using `createBrowserRouter`
    - Default route (`/`) redirects to the Search page
-   - Dedicated routes for Search (`/search`) and Comparison (`/comparison`) pages
+   - Dedicated routes for Search (`/search`), Comparison (`/comparison`), and Overview (`/overview/:id`) pages
+   - The Overview route uses URL parameters to identify the specific instrument
 
 2. **Navigation Components**:
    - Header component handles navigation between tabs

@@ -7,7 +7,7 @@
 | Project Setup | In Progress | 40% |
 | Database Implementation | In Progress | 40% |
 | Backend API | Not Started | 0% |
-| Frontend UI | In Progress | 45% |
+| Frontend UI | In Progress | 50% |
 | Integration | Not Started | 0% |
 | Testing | Not Started | 0% |
 | Documentation | In Progress | 20% |
@@ -223,12 +223,15 @@ As the project is in the initialization phase, there are no known implementation
 | 2025-03-19 | Downgraded Tailwind CSS from v4.0.14 to v3.4.17 to resolve compatibility issues |
 | 2025-03-19 | Updated PostCSS configuration to work with Tailwind CSS v3 |
 | 2025-03-19 | Fixed CSS styling issues in the application |
+| 2025-03-27 | Planned implementation of Overview page for detailed instrument information |
 
 ## Next Actions
 
-1. Set up ASP.NET Core Web API project (when .NET Core is installed)
-2. Implement instrument details view
-3. Implement comparison page
-4. Set up state management with Zustand
-5. Implement API client services
-6. Connect frontend to backend API
+1. Implement Overview page for instrument details
+   - Create component structure and layout
+   - Implement data visualization components
+   - Set up routing from Search page to Overview page
+2. Set up state management with Zustand
+3. Implement API client services for future backend integration
+4. Set up ASP.NET Core Web API project (when .NET Core is installed)
+5. Connect frontend to backend API

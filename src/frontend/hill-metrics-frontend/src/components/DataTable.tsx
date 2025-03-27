@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import EmptyState from './EmptyState';
 import ColumnSelector from './ColumnSelector/ColumnSelector';
 import { TableColumn } from '../types/dashboard';
@@ -19,6 +20,18 @@ const DataTable: React.FC<DataTableProps> = ({
   onRowSelect,
   onSearch,
 }) => {
+  const navigate = useNavigate();
+  
+  // Handle row click to navigate to overview page
+  const handleRowClick = (id: string | number, event: React.MouseEvent) => {
+    // Prevent navigation if clicking on checkbox
+    if ((event.target as HTMLElement).closest('input[type="checkbox"]')) {
+      return;
+    }
+    
+    // Navigate to overview page with the instrument ID
+    navigate(`/overview/${id}`);
+  };
   // Initialize columns with visibility and order properties
   const [columns, setColumns] = useState<TableColumn[]>(() => 
     initialColumns.map((col, index) => ({
@@ -393,7 +406,8 @@ const DataTable: React.FC<DataTableProps> = ({
               {data.map((row, rowIndex) => (
                 <tr
                   key={row.id || rowIndex}
-                  className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-500'}
+                  className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'} cursor-pointer hover:bg-slate-100`}
+                  onClick={(e) => handleRowClick(row.id, e)}
                 >
                   <td className="p-3 border-b border-slate-200 ç">
                     <input
