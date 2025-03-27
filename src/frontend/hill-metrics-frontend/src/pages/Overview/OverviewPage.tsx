@@ -45,42 +45,63 @@ const OverviewPage: React.FC = () => {
       ) : (
         <div className="bg-gray-50 overflow-hidden flex-1">
           <InstrumentHeader />
-          <div className="w-full max-w-[1416px] mx-auto px-4">
-            <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-              <div className="w-[21%] max-md:w-full max-md:ml-0">
-                <Sidebar />
+          
+          {/* Main content wrapper with three columns */}
+          <div className="flex min-h-screen">
+            {/* Column 1: Navigation sidebar with white background */}
+            <div className="w-[200px] flex-shrink-0 bg-white pl-4 pr-1">
+              <Sidebar />
+            </div>
+            
+            {/* Column 2: Indicators and characteristics */}
+            <div className="w-[250px] flex-shrink-0 pl-4">
+              {/* Specific indicators section */}
+              <div>
+                <SpecificIndicators />
               </div>
-              <div className="w-[79%] ml-5 max-md:w-full max-md:ml-0">
-                <div className="flex gap-6 flex-wrap mt-8 max-md:mt-10">
-                  <div className="w-[228px]">
-                    <SpecificIndicators />
-                    <SpecificCharacteristics />
-                    <div className="w-full mt-4">
-                      <GeneralCharacteristics />
-                    </div>
-                  </div>
-                  <div className="min-w-60 w-[850px] max-md:max-w-full">
-                    <div className="w-full max-md:max-w-full">
-                      <PerformanceMetrics />
-                      <div className="flex w-full gap-6 mt-6 max-md:max-w-full">
-                        <div className="min-w-60 w-full flex-1 shrink basis-[0%] max-md:max-w-full">
-                          <div className="w-full max-md:max-w-full">
-                            <Chart />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <MetricBars />
-                    <div className="flex w-full gap-4 flex-wrap mt-6 max-md:max-w-full">
-                      <PerformanceRanking />
-                      <CategoryComparison />
-                    </div>
-                    <div className="flex w-full gap-4 flex-wrap mt-6 max-md:max-w-full">
-                      <FeesCharacteristics />
-                      <AssetMap />
-                    </div>
-                    <SimilarInstruments />
-                  </div>
+              
+              {/* Specific characteristics section */}
+              <div className="mt-4">
+                <SpecificCharacteristics />
+              </div>
+              
+              {/* General characteristics section */}
+              <div className="mt-4">
+                <GeneralCharacteristics />
+              </div>
+            </div>
+            
+            {/* Column 3: Main content area */}
+            <div className="flex-1 px-5">
+              <div className="mt-4">
+                {/* Performance metrics */}
+                <PerformanceMetrics />
+                
+                {/* Chart section */}
+                <div className="mt-4">
+                  <Chart />
+                </div>
+                
+                {/* Metric bars */}
+                <div className="mt-4">
+                  <MetricBars />
+                </div>
+                
+                {/* Two-column layout for Performance ranking and Category comparison */}
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <PerformanceRanking />
+                  <CategoryComparison />
+                </div>
+                
+                {/* Two-column layout for Fees and Asset map */}
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <FeesCharacteristics />
+                  <AssetMap />
+                </div>
+                
+                {/* Similar instruments */}
+                <div className="mt-4">
+                  <SimilarInstruments />
                 </div>
               </div>
             </div>

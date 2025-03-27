@@ -27,7 +27,7 @@ const CharacteristicItem: React.FC<CharacteristicItemProps> = ({
 
 const SpecificCharacteristics: React.FC = () => {
   return (
-    <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white w-full mt-4 p-4 rounded-md border-solid">
+    <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white w-full p-4 rounded-md border-solid">
       <div className="text-slate-900 text-base font-semibold">
         Specific characteristics
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 const AssetMap: React.FC = () => {
   return (
-    <div className="flex flex-col relative aspect-[1.219] min-w-60 h-[211px] grow shrink w-[334px]">
+    <div className="flex flex-col relative h-[211px] grow shrink w-full">
       <img
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/df6f0571-eec9-439d-beb3-21e959754da7?placeholderIfAbsent=true"
         alt="Asset Map Background"

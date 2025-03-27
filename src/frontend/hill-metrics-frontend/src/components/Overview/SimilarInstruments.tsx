@@ -9,7 +9,7 @@ interface AssetCardProps {
 
 const AssetCard: React.FC<AssetCardProps> = ({ name, imgSrc, value, tags }) => {
   return (
-    <div className="items-stretch border border-[color:var(--slate-200,#E2E8F0)] bg-white flex min-w-60 min-h-28 flex-col justify-center w-[417px] p-4 rounded-md border-solid">
+    <div className="items-stretch border border-[color:var(--slate-200,#E2E8F0)] bg-white flex min-h-28 flex-col justify-center w-full p-4 rounded-md border-solid">
       <div className="flex w-full gap-[26px]">
         <div className="min-w-60 w-full flex-1 shrink basis-[0%]">
           <div className="flex w-full items-center gap-[40px_100px] text-[rgba(40,40,40,1)] whitespace-nowrap justify-between">
@@ -45,12 +45,12 @@ const AssetCard: React.FC<AssetCardProps> = ({ name, imgSrc, value, tags }) => {
 
 const SimilarInstruments: React.FC = () => {
   return (
-    <div className="w-full mt-6 max-md:max-w-full">
+    <div className="w-full mt-6 max-md:max-w-full mb-6">
       <div className="text-slate-700 text-lg font-medium leading-none max-md:max-w-full">
         Similar Instruments{" "}
       </div>
       <div className="w-full mt-4 max-md:max-w-full">
-        <div className="flex gap-4 flex-wrap max-md:max-w-full">
+        <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
           <AssetCard
             name="Bitcoin"
             imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/ebe2b7032181426b0132ea78a087cb3edc7af0385287eed2ba938191758c3f66?placeholderIfAbsent=true"
@@ -63,8 +63,6 @@ const SimilarInstruments: React.FC = () => {
             value="$571.71M"
             tags={["Cryptocurrency", "Similar with less fees"]}
           />
-        </div>
-        <div className="flex gap-4 flex-wrap mt-4 max-md:max-w-full">
           <AssetCard
             name="Etherium"
             imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/f01ba4e6aa7474f74fa63b9a6ed1beadcc3d88a975b3d587d1ccf46dbe111b2a?placeholderIfAbsent=true"
@@ -77,8 +75,6 @@ const SimilarInstruments: React.FC = () => {
             value="$571.71M"
             tags={["Cryptocurrency", "Similar with higher performance"]}
           />
-        </div>
-        <div className="flex gap-4 flex-wrap mt-4 max-md:max-w-full">
           <AssetCard
             name="Bitcoin"
             imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/ebe2b7032181426b0132ea78a087cb3edc7af0385287eed2ba938191758c3f66?placeholderIfAbsent=true"

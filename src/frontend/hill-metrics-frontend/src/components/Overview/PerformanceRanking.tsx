@@ -22,11 +22,11 @@ const PerformanceBar: React.FC<PerformanceBarProps> = ({ period, height }) => {
 
 const PerformanceRanking: React.FC = () => {
   return (
-    <div className="min-w-60 w-[417px]">
+    <div className="min-w-60 w-full">
       <div className="w-full text-lg text-slate-700 font-medium leading-none">
         Performance ranking
       </div>
-      <div className="items-stretch border border-[color:var(--slate-200,#E2E8F0)] bg-white flex min-h-[272px] w-full max-w-[417px] flex-col justify-center mt-4 p-4 rounded-md border-solid">
+      <div className="items-stretch border border-[color:var(--slate-200,#E2E8F0)] bg-white flex min-h-[272px] w-full flex-col justify-center mt-4 p-4 rounded-md border-solid">
         <div className="flex gap-6">
           <div className="min-h-[203px] text-sm text-[#8D9092] font-normal w-[50px]">
             <div>Top 50</div>

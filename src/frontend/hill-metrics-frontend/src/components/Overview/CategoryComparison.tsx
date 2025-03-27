@@ -2,11 +2,11 @@ import React from "react";
 
 const CategoryComparison: React.FC = () => {
   return (
-    <div className="min-w-60 w-[417px]">
+    <div className="min-w-60 w-full">
       <div className="text-slate-700 text-lg font-medium leading-none">
         Fonts vs categorie
       </div>
-      <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white w-full max-w-[417px] overflow-hidden mt-4 rounded-md border-solid">
+      <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white w-full overflow-hidden mt-4 rounded-md border-solid">
         <div className="flex w-full gap-[19px] overflow-hidden pt-4 px-[23px] max-md:pr-5">
           <div className="flex min-h-[194px] flex-col text-xs text-black font-normal whitespace-nowrap tracking-[0.15px] leading-none justify-between">
             <div>30</div>
