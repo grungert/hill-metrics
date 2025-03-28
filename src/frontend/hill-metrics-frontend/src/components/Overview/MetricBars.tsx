@@ -108,7 +108,7 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) =
           {rating}
         </div>
       </div>
-      <div className="flex items-center h-10 w-full mt-5 px-1 relative block">
+      <div className="items-center h-10 w-full mt-5 px-1 relative block">
         <div className="flex gap-[3px] w-full justify-between">
           {bars}
         </div>

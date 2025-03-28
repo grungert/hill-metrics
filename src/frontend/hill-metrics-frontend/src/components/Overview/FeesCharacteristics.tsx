@@ -7,7 +7,7 @@ interface FeeItemProps {
 
 const FeeItem: React.FC<FeeItemProps> = ({ label, value }) => {
   return (
-    <div className="w-full py-1 flex justify-between">
+    <div className="w-full py-2 flex justify-between">
       <div className="text-slate-700">{label}</div>
       <div className="text-[rgba(98,0,238,1)]">{value}</div>
     </div>

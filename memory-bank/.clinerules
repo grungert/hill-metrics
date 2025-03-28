@@ -39,6 +39,9 @@
 - Use async/await for asynchronous operations
 - Implement responsive design for all components
 - Use CSS modules or styled-components for styling
+- Maintain consistent heights for components that appear in the same row or section
+- Implement interactive elements (tooltips, hover effects) for better user feedback
+- Favor fixed height values when components need precise visual alignment
 
 ### Frontend Page Creation
 - User will provide code for frontend pages

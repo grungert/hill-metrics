@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({
     navigate(tab === 'search' ? '/search' : '/comparison');
   };
   return (
-    <header className="flex w-full h-14 justify-between items-center border border-slate-200 bg-white px-8">
+    <header className="flex w-full h-14 justify-between items-center border border-slate-200 bg-white px-8 z-10">
       <div className="flex items-center gap-8">
         <div className="flex justify-center items-center">
           {/* "M" logo */}
