@@ -1,91 +1,207 @@
-import React from "react";
+import React, { useState } from "react";
+
+// Define the point data types
+interface DataPoint {
+  x: number;
+  y: number;
+}
+
+// Props for data point markers
+interface MarkerProps {
+  size: number;
+  isHovered: boolean;
+}
+
+// Tooltip component
+interface TooltipProps {
+  point: DataPoint;
+  visible: boolean;
+}
+
+const Tooltip: React.FC<TooltipProps> = ({ point, visible }) => {
+  if (!visible) return null;
+  
+  return (
+    <div 
+      className="absolute bg-white px-2 py-1 text-xs font-medium rounded shadow-md z-10 transition-opacity duration-200 -translate-x-1/2 -translate-y-full"
+      style={{
+        left: "50%",
+        bottom: "100%",
+        marginBottom: "5px",
+        opacity: visible ? 1 : 0,
+        pointerEvents: 'none',
+        whiteSpace: 'nowrap'
+      }}
+    >
+      x: {point.x}, y: {point.y}
+    </div>
+  );
+};
+
+// Triangle SVG for "This product" marker
+const TriangleMarker: React.FC<MarkerProps> = ({ size, isHovered }) => (
+  <svg 
+    height={isHovered ? size * 1.2 : size} 
+    width={isHovered ? size * 1.2 : size} 
+    viewBox="0 0 10 10"
+    className="transition-all duration-200"
+  >
+    <polygon 
+      points="5,0 10,10 0,10" 
+      fill="#EE6002" 
+      filter={isHovered ? "drop-shadow(0 0 2px rgba(238, 96, 2, 0.5))" : "none"}
+    />
+  </svg>
+);
+
+// Circle SVG for "Others in category" marker
+const CircleMarker: React.FC<MarkerProps> = ({ size, isHovered }) => (
+  <div 
+    className="transition-all duration-200"
+    style={{ 
+      width: isHovered ? size * 1.2 : size, 
+      height: isHovered ? size * 1.2 : size, 
+      borderRadius: '50%', 
+      backgroundColor: '#6200EE',
+      boxShadow: isHovered ? '0 0 4px rgba(98, 0, 238, 0.7)' : 'none'
+    }}
+  />
+);
 
 const CategoryComparison: React.FC = () => {
+  // State to track which point is being hovered
+  const [hoveredPointIndex, setHoveredPointIndex] = useState<number | null>(null);
+  const [isThisProductHovered, setIsThisProductHovered] = useState(false);
+  
+  // Data for the chart
+  const thisProduct: DataPoint = { x: 30, y: 20 };
+  
+  // Data points for other products in the category
+  const othersInCategory: DataPoint[] = [
+    { x: 15, y: -10 },
+    { x: 10, y: -15 },
+    { x: 25, y: -2 },
+    { x: 40, y: -5 },
+    { x: 45, y: -3 },
+    { x: 55, y: 9 },
+    { x: 60, y: 0 },
+    { x: 65, y: 15 },
+    { x: 75, y: 15 },
+    { x: 85, y: 10 },
+    { x: 95, y: 18 },
+  ];
+
+  // Chart dimensions and boundaries
+  const chartWidth = 100;
+  const chartHeight = 60;
+  const yMin = -30;
+  const yMax = 30;
+  
+  // Utility function to calculate position on the chart
+  const calculatePosition = (point: DataPoint) => {
+    const xPercent = (point.x / chartWidth) * 100;
+    // Invert the y-axis (y increases upward)
+    const yPercent = 100 - ((point.y - yMin) / (yMax - yMin) * 100);
+    return { xPercent, yPercent };
+  };
+
+  // Calculate positions
+  const thisProductPosition = calculatePosition(thisProduct);
+  
+  // Handlers for hover events
+  const handleThisProductHover = (isHovering: boolean) => {
+    setIsThisProductHovered(isHovering);
+  };
+  
+  const handleOtherProductHover = (index: number | null) => {
+    setHoveredPointIndex(index);
+  };
+  
   return (
     <div className="min-w-60 w-full">
       <div className="text-slate-700 text-lg font-medium leading-none">
         Fonts vs categorie
       </div>
-      <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white w-full overflow-hidden mt-4 rounded-md border-solid">
-        <div className="flex w-full gap-[19px] overflow-hidden pt-4 px-[23px] max-md:pr-5">
-          <div className="flex min-h-[194px] flex-col text-xs text-black font-normal whitespace-nowrap tracking-[0.15px] leading-none justify-between">
+      <div className="items-stretch border border-[color:var(--slate-200,#E2E8F0)] bg-white flex h-[384px] w-full flex-col justify-center mt-4 p-4 rounded-md border-solid">
+        <div className="flex">
+          {/* Y-axis labels */}
+          <div className="flex flex-col justify-between text-xs text-[#8D9092] h-[240px] pr-2">
             <div>30</div>
-            <div className="mt-[13px]">20</div>
-            <div className="mt-[13px]">10</div>
-            <div className="mt-[13px]">0</div>
-            <div className="mt-[13px]">-10</div>
-            <div className="text-right mt-[13px]">-20</div>
-            <div className="mt-[13px]">-30</div>
+            <div>20</div>
+            <div>10</div>
+            <div>0</div>
+            <div>-10</div>
+            <div>-20</div>
+            <div>-30</div>
           </div>
-          <div className="grow shrink-0 basis-0 w-fit mt-2">
-            <div className="border border-[color:var(--Light-Base-Light-Gray,#E8EAED)] shadow-[0px_-1px_0px_0px_#E0E0E0_inset,1px_0px_0px_0px_#E0E0E0_inset] bg-white flex min-h-[179px] overflow-hidden border-solid">
-              <div className="shadow-[-1px_0px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white h-[179px] overflow-hidden flex-1 shrink basis-[0%]">
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full flex-col overflow-hidden items-center flex-1 pt-[21px] px-8 max-md:px-5">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/9a282b77cbff07371dbd24e328e59559efe88b201cc4725947323f18a8b8ced2?placeholderIfAbsent=true"
-                    alt="Chart Point"
-                    className="aspect-[1.22] object-contain w-[11px] fill-[#EE6002]"
-                  />
-                </div>
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full flex-col overflow-hidden flex-1 pt-1 pb-[17px] px-8 max-md:pl-5">
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] rounded-[100px] max-md:mr-[-3px]" />
-                </div>
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex min-h-[30px] w-full flex-1" />
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full gap-[19px] overflow-hidden flex-1 h-full pt-1 pb-[11px] px-7 max-md:px-5">
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] rounded-[100px]" />
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] mt-[5px] rounded-[100px]" />
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] mt-[5px] rounded-[100px]" />
-                </div>
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full flex-col overflow-hidden flex-1 pb-3 px-8 max-md:px-5">
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] rounded-[100px]" />
-                  <div className="bg-[#6200EE] self-center flex w-[9px] shrink-0 h-[9px] rounded-[100px]" />
-                </div>
-                <div className="bg-white flex min-h-[30px] w-full flex-1" />
-              </div>
-              <div className="bg-white h-[179px] overflow-hidden flex-1 shrink basis-[0%]">
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex min-h-[30px] w-full flex-1" />
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full items-stretch gap-5 overflow-hidden flex-1 h-full px-8 py-0.5 max-md:px-5">
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] mt-[5px] rounded-[100px]" />
-                  <div className="flex flex-col">
-                    <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] rounded-[100px]" />
-                    <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] mt-[9px] rounded-[100px]" />
-                  </div>
-                </div>
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full flex-col overflow-hidden flex-1 pb-[21px] px-0.5 max-md:pr-5">
-                  <div className="bg-[#6200EE] flex w-[9px] shrink-0 h-[9px] rounded-[100px]" />
-                </div>
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex w-full flex-col overflow-hidden flex-1 pb-[23px] px-[5px] max-md:pr-5">
-                  <div className="bg-[#6200EE] z-10 flex w-[9px] shrink-0 h-[9px] rounded-[100px]" />
-                </div>
-                <div className="shadow-[0px_-1px_0px_0px_rgba(0,0,0,0.08)_inset] bg-white flex min-h-[30px] w-full flex-1" />
-                <div className="bg-white flex min-h-[30px] w-full flex-1" />
-              </div>
+          
+          {/* Chart area */}
+          <div className="flex-1 relative h-[240px] border-l border-t border-gray-200">
+            {/* Grid lines */}
+            <div className="absolute inset-0 grid grid-cols-3 grid-rows-6 pointer-events-none">
+              {/* Horizontal grid lines */}
+              <div className="absolute w-full h-px bg-gray-200 top-1/6"></div>
+              <div className="absolute w-full h-px bg-gray-200 top-2/6"></div>
+              <div className="absolute w-full h-px bg-gray-200 top-3/6"></div>
+              <div className="absolute w-full h-px bg-gray-200 top-4/6"></div>
+              <div className="absolute w-full h-px bg-gray-200 top-5/6"></div>
+              
+              {/* Vertical grid lines */}
+              <div className="absolute h-full w-px bg-gray-200 left-1/3"></div>
+              <div className="absolute h-full w-px bg-gray-200 left-2/3"></div>
             </div>
-            <div className="flex w-full gap-9 text-xs text-black font-normal whitespace-nowrap tracking-[0.15px] leading-none mt-[5px]">
-              <div className="self-stretch overflow-hidden flex-1 shrink basis-[0%] pr-1 py-1">
-                0
-              </div>
-              <div className="self-stretch overflow-hidden flex-1 shrink basis-[0%] p-1">
-                50
-              </div>
-              <div className="self-stretch overflow-hidden flex-1 shrink basis-[0%] pl-1 py-1">
-                100
-              </div>
+            
+            {/* Data points for others in category */}
+            {othersInCategory.map((point, index) => {
+              const { xPercent, yPercent } = calculatePosition(point);
+              const isHovered = hoveredPointIndex === index;
+              return (
+                <div 
+                  key={index}
+                  className="absolute"
+                  style={{ left: `${xPercent}%`, top: `${yPercent}%`, transform: 'translate(-50%, -50%)' }}
+                  onMouseEnter={() => handleOtherProductHover(index)}
+                  onMouseLeave={() => handleOtherProductHover(null)}
+                >
+                  <CircleMarker size={10} isHovered={isHovered} />
+                  {isHovered && <Tooltip point={point} visible={true} />}
+                </div>
+              );
+            })}
+            
+            {/* Data point for this product */}
+            <div 
+              className="absolute"
+              style={{ 
+                left: `${thisProductPosition.xPercent}%`, 
+                top: `${thisProductPosition.yPercent}%`,
+                transform: 'translate(-50%, -50%)'
+              }}
+              onMouseEnter={() => handleThisProductHover(true)}
+              onMouseLeave={() => handleThisProductHover(false)}
+            >
+              <TriangleMarker size={12} isHovered={isThisProductHovered} />
+              {isThisProductHovered && <Tooltip point={thisProduct} visible={true} />}
             </div>
           </div>
         </div>
-        <div className="flex min-h-10 w-full gap-6 overflow-hidden text-xs text-slate-800 font-normal tracking-[0.15px] leading-none pl-9 pr-6 py-3 max-md:px-5">
-          <div className="flex items-center gap-2 justify-center">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/e857c1afd26cadaccae9bcd42afd3b6df3611dee9dde7153d028c0572e914bab?placeholderIfAbsent=true"
-              alt="Legend Icon"
-              className="aspect-[1.11] object-contain w-2.5 fill-[#EE6002] self-stretch shrink-0 my-auto"
-            />
-            <div className="self-stretch my-auto">This product</div>
+        
+        {/* X-axis labels */}
+        <div className="flex pl-8 pt-2 text-xs text-[#8D9092]">
+          <div className="flex-1">0</div>
+          <div className="flex-1 text-center">50</div>
+          <div className="flex-1 text-right">100</div>
+        </div>
+        
+        {/* Legend */}
+        <div className="flex items-center gap-4 mt-4 pl-2 text-xs text-slate-800">
+          <div className="flex items-center gap-2">
+            <TriangleMarker size={10} isHovered={false} />
+            <span>This product</span>
           </div>
-          <div className="flex items-center gap-2 justify-center">
-            <div className="bg-[#6200EE] self-stretch flex w-[9px] shrink-0 h-[9px] my-auto rounded-[100px]" />
-            <div className="self-stretch my-auto">Others in category</div>
+          <div className="flex items-center gap-2">
+            <CircleMarker size={9} isHovered={false} />
+            <span>Others in category</span>
           </div>
         </div>
       </div>

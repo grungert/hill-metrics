@@ -38,7 +38,7 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) =
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
   
   // Calculate the total number of bars to display
-  const totalBars = 40;
+  const totalBars = 30;
   // Calculate which bar to highlight based on progress
   const highlightIndex = Math.floor((progress / 100) * totalBars) - 1;
   
@@ -108,7 +108,7 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) =
           {rating}
         </div>
       </div>
-      <div className="flex items-center h-10 w-full mt-2 px-1 relative">
+      <div className="flex items-center h-10 w-full mt-5 px-1 relative block">
         <div className="flex gap-[3px] w-full justify-between">
           {bars}
         </div>
