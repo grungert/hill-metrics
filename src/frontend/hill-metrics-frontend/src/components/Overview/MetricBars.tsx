@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import InfoIcon from "./InfoIcon";
 
 interface MetricBarProps {
@@ -7,15 +7,67 @@ interface MetricBarProps {
   progress?: number; // 0-100 percentage value
 }
 
+// Tooltip component for displaying the value on hover
+interface TooltipProps {
+  value: number;
+  position: { x: number; y: number } | null;
+  visible: boolean;
+}
+
+const Tooltip: React.FC<TooltipProps> = ({ value, position, visible }) => {
+  if (!visible || !position) return null;
+  
+  return (
+    <div 
+      className="absolute bg-white px-2 py-1 text-xs font-medium rounded shadow-md z-10 transition-opacity duration-200"
+      style={{
+        left: position.x,
+        top: position.y - 30, // Position above the bar
+        opacity: visible ? 1 : 0,
+        pointerEvents: 'none' // Make sure it doesn't interfere with hover events
+      }}
+    >
+      {value}%
+    </div>
+  );
+};
+
 const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) => {
+  // State to track which bar is being hovered and tooltip position
+  const [hoveredBarIndex, setHoveredBarIndex] = useState<number | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
+  
   // Calculate the total number of bars to display
-  const totalBars = 30;
+  const totalBars = 40;
   // Calculate which bar to highlight based on progress
   const highlightIndex = Math.floor((progress / 100) * totalBars) - 1;
   
   // Define start and end colors for the gradient
   const startColor = [212, 185, 251]; // #d4b9fb - light purple
   const endColor = [124, 40, 245];    // #7c28f5 - dark purple
+  
+  // Handler for mouse enter on a bar
+  const handleBarMouseEnter = (index: number, event: React.MouseEvent<HTMLSpanElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const containerRect = event.currentTarget.closest('.relative')?.getBoundingClientRect() || rect;
+    
+    setHoveredBarIndex(index);
+    setTooltipPosition({
+      x: rect.left - containerRect.left + (rect.width / 2),
+      y: rect.top - containerRect.top
+    });
+  };
+  
+  // Handler for mouse leave on a bar
+  const handleBarMouseLeave = () => {
+    setHoveredBarIndex(null);
+    setTooltipPosition(null);
+  };
+  
+  // Calculate the exact value this bar represents
+  const getBarValue = (index: number) => {
+    return Math.round((index + 1) / totalBars * 100);
+  };
   
   // Generate the bars with gradient colors
   const bars = Array.from({ length: totalBars }).map((_, index) => {
@@ -28,22 +80,25 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) =
     
     // Determine if this bar should be highlighted (taller)
     const isHighlight = index === highlightIndex;
+    const barValue = getBarValue(index);
     
     return (
       <span 
         key={index} 
-        className={`block flex-grow h-5 rounded-sm transition-all duration-300 ${isHighlight ? 'h-8 -translate-y-1.5' : ''}`}
+        className={`block flex-grow h-5 rounded-sm transition-all duration-300 cursor-pointer ${isHighlight ? 'h-8 -translate-y-1.5' : ''}`}
         style={{ 
           backgroundColor: color,
           height: isHighlight ? '34px' : '20px',
           transform: isHighlight ? 'translateY(-7px)' : 'none'
         }}
+        onMouseEnter={(e) => handleBarMouseEnter(index, e)}
+        onMouseLeave={handleBarMouseLeave}
       />
     );
   });
 
   return (
-    <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white self-stretch flex-1 shrink basis-[0%] my-auto px-3 py-4 rounded-md border-solid">
+    <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white self-stretch flex-1 shrink basis-[0%] my-auto px-3 py-4 rounded-md border-solid relative">
       <div className="flex w-full items-center gap-[40px_64px] font-normal whitespace-nowrap justify-between">
         <div className="self-stretch flex items-center gap-0.5 text-base text-slate-900 my-auto">
           <div className="self-stretch my-auto">{title}</div>
@@ -53,10 +108,17 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) =
           {rating}
         </div>
       </div>
-      <div className="items-center mt-4 px-1">
+      <div className="flex items-center h-10 w-full mt-2 px-1 relative">
         <div className="flex gap-[3px] w-full justify-between">
           {bars}
         </div>
+        
+        {/* Tooltip that shows the value */}
+        <Tooltip 
+          value={hoveredBarIndex !== null ? getBarValue(hoveredBarIndex) : 0}
+          position={tooltipPosition}
+          visible={hoveredBarIndex !== null}
+        />
       </div>
     </div>
   );
