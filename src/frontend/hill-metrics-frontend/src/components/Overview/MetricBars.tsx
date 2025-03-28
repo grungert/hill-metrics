@@ -4,9 +4,44 @@ import InfoIcon from "./InfoIcon";
 interface MetricBarProps {
   title: string;
   rating: string;
+  progress?: number; // 0-100 percentage value
 }
 
-const MetricBar: React.FC<MetricBarProps> = ({ title, rating }) => {
+const MetricBar: React.FC<MetricBarProps> = ({ title, rating, progress = 80 }) => {
+  // Calculate the total number of bars to display
+  const totalBars = 30;
+  // Calculate which bar to highlight based on progress
+  const highlightIndex = Math.floor((progress / 100) * totalBars) - 1;
+  
+  // Define start and end colors for the gradient
+  const startColor = [212, 185, 251]; // #d4b9fb - light purple
+  const endColor = [124, 40, 245];    // #7c28f5 - dark purple
+  
+  // Generate the bars with gradient colors
+  const bars = Array.from({ length: totalBars }).map((_, index) => {
+    // Calculate color for this specific bar based on its position in the gradient
+    const ratio = index / (totalBars - 1);
+    const r = Math.floor(startColor[0] + ratio * (endColor[0] - startColor[0]));
+    const g = Math.floor(startColor[1] + ratio * (endColor[1] - startColor[1]));
+    const b = Math.floor(startColor[2] + ratio * (endColor[2] - startColor[2]));
+    const color = `rgb(${r}, ${g}, ${b})`;
+    
+    // Determine if this bar should be highlighted (taller)
+    const isHighlight = index === highlightIndex;
+    
+    return (
+      <span 
+        key={index} 
+        className={`block flex-grow h-5 rounded-sm transition-all duration-300 ${isHighlight ? 'h-8 -translate-y-1.5' : ''}`}
+        style={{ 
+          backgroundColor: color,
+          height: isHighlight ? '34px' : '20px',
+          transform: isHighlight ? 'translateY(-7px)' : 'none'
+        }}
+      />
+    );
+  });
+
   return (
     <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white self-stretch flex-1 shrink basis-[0%] my-auto px-3 py-4 rounded-md border-solid">
       <div className="flex w-full items-center gap-[40px_64px] font-normal whitespace-nowrap justify-between">
@@ -18,28 +53,10 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating }) => {
           {rating}
         </div>
       </div>
-      <div className="rotate-[3.141592653589793rad] flex w-full items-center justify-between mt-2">
-        {Array.from({ length: 28 }).map((_, index) => {
-          // Calculate color based on index
-          const colorIndex = Math.max(0, 28 - index);
-          const opacity = colorIndex / 28;
-          const r = Math.round(98 + (222 - 98) * (1 - opacity));
-          const g = Math.round(0 + (237 - 0) * (1 - opacity));
-          const b = Math.round(238 + (255 - 238) * (1 - opacity));
-
-          // Determine height
-          let height = "h-4";
-          if (index === 3) {
-            height = "h-8";
-          }
-
-          return (
-            <div
-              key={index}
-              className={`bg-[rgba(${r},${g},${b},1)] self-stretch flex w-[3px] shrink-0 ${height} my-auto rounded-sm`}
-            />
-          );
-        })}
+      <div className="items-center mt-4 px-1">
+        <div className="flex gap-[3px] w-full justify-between">
+          {bars}
+        </div>
       </div>
     </div>
   );
@@ -48,10 +65,10 @@ const MetricBar: React.FC<MetricBarProps> = ({ title, rating }) => {
 const MetricBars: React.FC = () => {
   return (
     <div className="flex w-full items-center gap-3 flex-wrap mt-6 max-md:max-w-full">
-      <MetricBar title="Liquidity" rating="Good" />
-      <MetricBar title="Marketcap" rating="Good" />
-      <MetricBar title="Performance" rating="Good" />
-      <MetricBar title="Reliability" rating="Good" />
+      <MetricBar title="Liquidity" rating="Good" progress={75} />
+      <MetricBar title="Marketcap" rating="Good" progress={90} />
+      <MetricBar title="Performance" rating="Good" progress={65} />
+      <MetricBar title="Reliability" rating="Good" progress={80} />
     </div>
   );
 };
