@@ -11,6 +11,16 @@ import {
 // Define types for the react-simple-maps components
 type Point = [number, number];
 
+// Define types for the geography data
+interface GeographyProps {
+  rsmKey: string;
+  id: string;
+  properties: {
+    name: string;
+    [key: string]: any;
+  };
+}
+
 // Use a standard TopoJSON URL for world geography data
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -92,14 +102,11 @@ const AssetMap = () => {
         Asset Map
       </div>
       <div className="border border-[color:var(--slate-200,#E2E8F0)] bg-white w-full mt-4 py-5 px-6 rounded-md border-solid overflow-hidden">
-        {/* @ts-ignore - Ignoring type errors for react-simple-maps components */}
-        <ComposableMap  height={500}>
-          {/* @ts-ignore */}
-          {/* @ts-ignore */}
-          {/* @ts-ignore */}
+        <ComposableMap projection="geoEqualEarth" height={500}>
+          
           <Geographies geography={geoUrl} stroke="#FFF" strokeWidth={0.5}>
             {({ geographies }) =>
-              geographies.map((geo) => {
+              geographies.map((geo: GeographyProps) => {
                 // The world-atlas data uses numeric IDs and stores country names in properties
                 // We'll check if the country name contains any of our highlighted country names
                 const countryName = geo.properties?.name || "";
@@ -162,7 +169,6 @@ const AssetMap = () => {
                   }
                 });
                 return (
-                  /* @ts-ignore */
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
@@ -188,8 +194,7 @@ const AssetMap = () => {
               })
             }
           </Geographies>
-          {/* @ts-ignore */}
-         
+          
         </ComposableMap>
       </div>
       {tooltipContent && (
