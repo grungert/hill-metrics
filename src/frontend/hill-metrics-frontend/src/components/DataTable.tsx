@@ -11,6 +11,7 @@ interface DataTableProps {
   isLoading?: boolean;
   onRowSelect?: (id: string | number, selected: boolean) => void;
   onSearch?: (query: string) => void;
+  highlightedRowId?: string | null;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -19,6 +20,7 @@ const DataTable: React.FC<DataTableProps> = ({
   isLoading = false,
   onRowSelect,
   onSearch,
+  highlightedRowId = null,
 }) => {
   const navigate = useNavigate();
   
@@ -406,7 +408,9 @@ const DataTable: React.FC<DataTableProps> = ({
               {data.map((row, rowIndex) => (
                 <tr
                   key={row.id || rowIndex}
-                  className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'} cursor-pointer hover:bg-slate-100`}
+                  className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'} cursor-pointer hover:bg-slate-100 ${
+                    highlightedRowId && row.id?.toString() === highlightedRowId ? 'row-highlight' : ''
+                  }`}
                   onClick={(e) => handleRowClick(row.id, e)}
                 >
                   <td className="p-3 border-b border-slate-200 ç">

@@ -266,10 +266,29 @@ As the project is in the initialization phase, there are no known implementation
 | 2025-04-03 | Implemented navigation from search results to respective pages |
 | 2025-04-03 | Enhanced Overview page to display instrument details based on URL parameter |
 | 2025-04-03 | Updated memory bank with enhanced search bar implementation details |
+| 2025-04-03 | Implemented search actions functionality with proper page navigation |
+| 2025-04-03 | Added Bitcoin Atom instrument data to comparison chart and search table |
+| 2025-04-03 | Created instrument details service for consistent data across pages |
+| 2025-04-03 | Fixed potential infinite update loop in the search page |
+| 2025-04-03 | Updated memory bank with search actions implementation details |
+| 2025-04-03 | Added row highlight animation for newly added items to search table |
+| 2025-04-03 | Implemented Toast notification system for user feedback |
+| 2025-04-03 | Added visual feedback for duplicate items in the search table |
 
 ## Next Actions
 
-1. Complete Overview page implementation:
+1. Polish UI feedback mechanisms:
+   - Refine animation timing and style for row highlights
+   - Add smooth transitions for toast notifications
+   - Implement keyboard accessibility for toast dismissal
+   - Consider adding sound feedback for important actions (optional)
+
+2. Implement keyboard navigation for search results:
+   - Add up/down arrow key support for navigating through results
+   - Add Enter key support for selecting highlighted items
+   - Improve focus management for better accessibility
+
+2. Complete Overview page implementation:
    - Add transitions and interactive elements
    - Enhance data visualization components
    - Set up search-to-overview navigation flow

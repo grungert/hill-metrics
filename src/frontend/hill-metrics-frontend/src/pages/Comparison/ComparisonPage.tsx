@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import ComparisonUI from "../../components/Comparison/ComparisonUI";
 import useInstrumentStore from '../../store/instrumentStore';
+import { getInstrumentComparisonDataById } from '../../services/instrumentDetailsService';
 
 const ComparisonPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'search' | 'comparison'>('comparison');
@@ -34,6 +35,15 @@ const ComparisonPage: React.FC = () => {
     // In a real application, this would filter the data based on the search query
   };
 
+  // Store added instrument IDs to pass to ComparisonUI
+  const [addedInstruments, setAddedInstruments] = useState<string[]>([]);
+  
+  // Process instruments from the store
+  useEffect(() => {
+    // Update the list of added instruments when the store changes
+    setAddedInstruments(comparisonInstruments);
+  }, [comparisonInstruments]);
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header 
@@ -42,7 +52,7 @@ const ComparisonPage: React.FC = () => {
         onSearch={handleSearch}
       />
       <div className="h-screen flex bg-[#f8f9fa] flex-col overflow-hidden">
-        <ComparisonUI />
+        <ComparisonUI addedInstrumentIds={addedInstruments} />
       </div>
     </div>
   );

@@ -78,6 +78,100 @@ The project has made significant progress in the initialization phase:
        - "View" action button with navigation to instrument details
        - State persistence for added items
        - Fixed styling for category badges to always show count values
+       - Implemented search actions functionality:
+         - "Add to Comparison" now adds the instrument to the comparison chart and list
+         - "Add to List" now adds the instrument to the top of the search page data table
+         - Search bar stays open after actions for better multi-item workflow
+         - Instruments state persists between page navigations
+         - Created a dedicated instrument details service for consistent data across pages
+         - Added visual feedback for operations:
+           - Row highlight animation when adding items to the search table (0.6s duration)
+           - Toast notifications for successful additions and duplicate items
+           - Reusable Toast component with different status types (success, info, warning, error)
+# Active Context: Hill Metrics Financial Screener
+
+## Current Development Focus
+
+We are in the initial phase of the Hill Metrics Financial Screener project. The current focus is on:
+
+1. **Project Setup and Architecture**: Establishing the foundational architecture and project structure for both frontend and backend components.
+
+2. **Core Data Models**: Defining and implementing the core data models for financial instruments and related entities.
+
+3. **Database Schema Implementation**: Creating the database schema based on the specifications in the database documentation.
+
+4. **Frontend Expansion**: Building out the application's key pages and features:
+   - Search page functionality (completed)
+   - Comparison page visualization (completed)
+   - Overview page for detailed instrument information (in progress)
+     - Three-column layout structure implemented
+     - Component responsiveness improved
+     - Fixed layout rendering issues
+   - Enhanced search bar with real-time suggestions and navigation (completed)
+
+5. **Navigation and User Flow**: Implementing intuitive navigation between related pages:
+   - From Search results to detailed Overview page
+   - From Overview to Comparison page
+   - From search results to appropriate pages based on actions
+
+## Recent Changes
+
+The project has made significant progress in the initialization phase:
+
+1. **Database Implementation**:
+   - Created MySQL database
+   - Implemented the database schema with all required tables and relationships
+   - Set up indexes for frequently queried columns
+
+2. **Frontend Development**:
+   - Set up React application with Vite
+   - Implemented core UI components:
+     - Header with navigation tabs and search input
+     - Filter bar with filter buttons
+     - Data table with sorting and pagination
+     - Empty state for no results
+   - Created search page with sample data
+   - Implemented CSS styling for all components
+   - Enhanced filter functionality:
+     - Implemented hierarchical structure for asset categories and subcategories
+     - Added collapsible filter panels with expand/collapse functionality
+     - Created specific filters for each asset type (Cryptocurrency, Mutual Funds, etc.)
+     - Implemented sector filter with hierarchical structure and proper parent-child relationships
+     - Redesigned Most Used filter with advanced filtering options:
+       - Return criteria with comparison operators and time periods
+       - Risk, Liquidity, and Marketcap indicators with visual slider selection
+       - Color-coded indicators (green for low risk, yellow for moderate, red for high)
+     - Fixed duplicate entries in filter hierarchies
+     - Improved filter panel UI with better styling and interaction
+     - Implemented bidirectional filter updates: closing filter pills now updates the underlying filter state
+     - Added column visibility and reordering functionality to DataTable:
+       - Users can show/hide columns via dropdown menu
+       - Columns can be reordered using drag-and-drop
+       - Name column is always visible (cannot be hidden)
+       - Column state persists during the session
+     - Implemented routing with React Router:
+       - Added navigation between Search and Comparison pages
+       - Created a basic Comparison page with the same Header component
+       - Updated Header component to use React Router for navigation
+       - Configured default route to redirect to Search page
+     - Implemented Comparison page with advanced features:
+       - Asset list with collapsible panel
+       - Interactive graph visualization using Recharts
+       - Time range selection with custom date picker
+       - Asset visibility toggling
+       - Asset color customization
+     - Implemented Enhanced Search Bar with advanced features:
+       - Real-time suggestions with 120ms debounce
+       - Category tabs with badge counts
+       - Grouped search results
+       - "Add to Comparison" and "Add to List" action buttons with navigation
+       - "View" action button with navigation to instrument details
+       - State persistence for added items
+       - Fixed styling for category badges to always show count values
+       - Implemented search actions functionality:
+         - "Add to Comparison" now adds the instrument to the comparison chart and list
+         - "Add to List" now adds the instrument to the top of the search page data table
+         - Search bar stays open after actions for better multi-item workflow
      - Implemented cross-page state management:
        - Created Zustand store for managing instruments
        - Maintained state of comparison and list instruments

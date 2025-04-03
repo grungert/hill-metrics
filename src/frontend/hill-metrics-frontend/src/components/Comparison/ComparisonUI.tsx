@@ -1,12 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AssetList from "./AssetList";
 import Graph from "./Graph";
 import AssetTags from "./AssetTags";
 import { mockAssetData, generateChartData } from "./mockData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getInstrumentComparisonDataById } from "../../services/instrumentDetailsService";
 
-export default function ComparisonUI() {
+interface ComparisonUIProps {
+  addedInstrumentIds?: string[];
+}
+
+export default function ComparisonUI({ addedInstrumentIds = [] }: ComparisonUIProps) {
   const [assets, setAssets] = useState(mockAssetData);
+
+  // Add instruments from props when they change
+  useEffect(() => {
+    if (addedInstrumentIds.length > 0) {
+      // Process each added instrument ID
+      addedInstrumentIds.forEach(id => {
+        // Check if the instrument is already in the assets list
+        const existingIndex = assets.findIndex(asset => asset.id === id);
+        
+        if (existingIndex === -1) {
+          // Get the instrument data
+          const instrumentData = getInstrumentComparisonDataById(id);
+          
+          if (instrumentData) {
+            // Add the instrument to the assets list
+            setAssets(prevAssets => [...prevAssets, instrumentData]);
+            
+            // Update the selected assets and visible assets lists
+            setSelectedAssets(prev => [...prev, id]);
+            setVisibleAssets(prev => [...prev, id]);
+          }
+        }
+      });
+    }
+  }, [addedInstrumentIds]);
   const [selectedAssets, setSelectedAssets] = useState(
     mockAssetData.filter((asset) => asset.selected).map((asset) => asset.id)
   );

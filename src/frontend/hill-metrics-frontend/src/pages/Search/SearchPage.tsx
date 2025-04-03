@@ -4,9 +4,12 @@ import Header from '../../components/Header';
 import FilterBar from '../../components/FilterBar';
 import DataTable from '../../components/DataTable';
 import SelectedFilters from '../../components/SelectedFilters';
+import Toast from '../../components/Toast';
 import { TableColumn, AssetItem } from '../../types/dashboard';
 import { FilterType, FilterItem } from '../../types/filters';
 import useInstrumentStore from '../../store/instrumentStore';
+import { getInstrumentSearchDataById } from '../../services/instrumentDetailsService';
+import '../../components/animations.css';
 
 const SearchPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,6 +21,40 @@ const SearchPage: React.FC = () => {
   
   // Get the location to check for query parameters
   const location = useLocation();
+  
+  // Reference to keep track of added instruments to prevent duplicates
+  const addedInstrumentsRef = useRef<Set<string>>(new Set());
+  
+  // State for highlighting newly added row
+  const [highlightedRowId, setHighlightedRowId] = useState<string | null>(null);
+  
+  // State for toast notifications
+  const [toast, setToast] = useState<{
+    visible: boolean;
+    message: string;
+    type: 'success' | 'warning' | 'error' | 'info';
+  }>({
+    visible: false,
+    message: '',
+    type: 'info'
+  });
+  
+  // Show toast notification
+  const showToast = (message: string, type: 'success' | 'warning' | 'error' | 'info' = 'info') => {
+    setToast({
+      visible: true,
+      message,
+      type
+    });
+  };
+
+  // Hide toast notification
+  const hideToast = () => {
+    setToast(prev => ({
+      ...prev,
+      visible: false
+    }));
+  };
   
   // Effect to handle instruments added to the list
   useEffect(() => {
@@ -187,8 +224,65 @@ const SearchPage: React.FC = () => {
     console.log(`Removed filter: ${filter.type} - ${filter.label}: ${filter.value}`);
   };
 
+  // Process instruments from the store
+  useEffect(() => {
+    if (listInstruments.length > 0) {
+      let hasNewInstruments = false;
+      
+      // For each instrument in the list store
+      listInstruments.forEach(id => {
+        // Check if we've already added this instrument
+        if (!addedInstrumentsRef.current.has(id)) {
+          // Get instrument data
+          const instrumentData = getInstrumentSearchDataById(id);
+          
+          if (instrumentData) {
+            // Mark this instrument as added
+            addedInstrumentsRef.current.add(id);
+            hasNewInstruments = true;
+            
+            // Add the instrument to the top of the data list
+            setData(prevData => [instrumentData, ...prevData]);
+            
+            // Highlight the newly added row
+            setHighlightedRowId(id.toString());
+            
+            // Clear the highlight after 600ms (0.6 seconds)
+            setTimeout(() => {
+              setHighlightedRowId(null);
+            }, 600);
+            
+            // Show success toast
+            showToast(`Added ${instrumentData.name} to the table`, 'success');
+          }
+        } else {
+          // Show notification that the item is already in the table
+          const instrument = data.find(item => item.id === id);
+          if (instrument) {
+            showToast(`${instrument.name} is already in the table`, 'info');
+          } else {
+            showToast(`This item is already in the table`, 'info');
+          }
+        }
+      });
+      
+      if (hasNewInstruments) {
+        console.log('Added new instruments to the table');
+      }
+    }
+  }, [listInstruments, data]); // Include data to get latest instrument names
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      {/* Toast notification */}
+      {toast.visible && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
+      )}
+      
       <Header 
         onSearch={handleSearch}
       />
@@ -208,6 +302,7 @@ const SearchPage: React.FC = () => {
             data={data} 
             onRowSelect={handleRowSelect}
             onSearch={handleTableSearch}
+            highlightedRowId={highlightedRowId}
           />
         </div>
       </div>
