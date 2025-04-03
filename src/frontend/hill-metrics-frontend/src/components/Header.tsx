@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import SearchInput from '../ui/SearchInput';
+import EnhancedSearchBar from './EnhancedSearch/EnhancedSearchBar';
 
 interface HeaderProps {
   activeTab?: 'search' | 'comparison'; // Optional as we'll determine from route
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-6">
-        <SearchInput
+        <EnhancedSearchBar
           placeholder="Search for assets..."
           className="w-[338px]"
           onSearch={onSearch}
