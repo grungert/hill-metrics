@@ -3,20 +3,30 @@ import useDebounce from '../../hooks/useDebounce';
 import { mockSearchService } from '../../services/mockSearchService';
 import { SearchResults } from '../../types/search';
 import ResultsContainer from './ResultsContainer';
+import useInstrumentStore from '../../store/instrumentStore';
 
 interface EnhancedSearchBarProps {
   onSearch?: (query: string) => void;
   className?: string;
   placeholder?: string;
+  onNavigateToComparison?: (itemId: string) => void;
+  onNavigateToSearch?: (itemId: string) => void;
+  onNavigateToOverview?: (itemId: string) => void;
 }
 
 const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   onSearch,
   className = '',
   placeholder = 'Search for assets...',
+  onNavigateToComparison,
+  onNavigateToSearch,
+  onNavigateToOverview,
 }) => {
+  // Get state management from the instrument store
+  const { lastSearchTerm, setLastSearchTerm, isNavigating } = useInstrumentStore();
+  
   // Input and search state
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(lastSearchTerm || '');
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<SearchResults>({
     categories: [],
@@ -37,7 +47,7 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Dropdown visibility state
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(Boolean(lastSearchTerm));
 
   // Debounce search input
   const debouncedSearchTerm = useDebounce(inputValue, 120);
@@ -45,6 +55,13 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   // Ref to detect clicks outside the search bar
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Show results when component mounts if there's a search term
+  useEffect(() => {
+    if (lastSearchTerm) {
+      setShowResults(true);
+    }
+  }, [lastSearchTerm]);
+  
   // Search for results when the debounced search term changes
   useEffect(() => {
     // Don't search if no input
@@ -112,6 +129,7 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
+    setLastSearchTerm(value);
 
     // Show results when typing
     if (value.trim()) {
@@ -164,6 +182,11 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       }));
       return { ...prevResults, groups: updatedGroups };
     });
+    
+    // Navigate to comparison page with item if added and navigation handler exists
+    if (added && onNavigateToComparison) {
+      onNavigateToComparison(itemId);
+    }
   };
 
   // Handle adding items to lists
@@ -179,17 +202,27 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       }));
       return { ...prevResults, groups: updatedGroups };
     });
+    
+    // Navigate to search page with item if added and navigation handler exists
+    if (added && onNavigateToSearch) {
+      onNavigateToSearch(itemId);
+    }
   };
 
   // Handle view item
   const handleViewItem = (itemId: string) => {
-    console.log('View item:', itemId);
-    // This would navigate to the item details page in a real app
+    // Navigate to overview page
+    if (onNavigateToOverview) {
+      onNavigateToOverview(itemId);
+    } else {
+      console.log('View item:', itemId);
+    }
   };
 
   // Handle clear button click
   const handleClearInput = () => {
     setInputValue('');
+    setLastSearchTerm('');
     setShowResults(false);
     setSelectedCategory('all');
   };
@@ -199,7 +232,8 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         searchContainerRef.current &&
-        !searchContainerRef.current.contains(event.target as Node)
+        !searchContainerRef.current.contains(event.target as Node) &&
+        !isNavigating // Don't close if we're navigating
       ) {
         setShowResults(false);
       }
@@ -209,7 +243,7 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isNavigating]);
 
   // Submit the search
   const handleSubmit = (e: React.FormEvent) => {

@@ -1,15 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import FilterBar from '../../components/FilterBar';
 import DataTable from '../../components/DataTable';
 import SelectedFilters from '../../components/SelectedFilters';
 import { TableColumn, AssetItem } from '../../types/dashboard';
 import { FilterType, FilterItem } from '../../types/filters';
+import useInstrumentStore from '../../store/instrumentStore';
 
 const SearchPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Record<string, number[]>>({});
   const [selectedFilterPills, setSelectedFilterPills] = useState<FilterItem[]>([]);
+  
+  // Get access to the instrument store
+  const { listInstruments } = useInstrumentStore();
+  
+  // Get the location to check for query parameters
+  const location = useLocation();
+  
+  // Effect to handle instruments added to the list
+  useEffect(() => {
+    if (listInstruments.length > 0) {
+      console.log('Instruments in list:', listInstruments);
+      // In a real application, you would fetch instrument details from an API
+      // and update the table data to include these instruments
+      
+      // For demonstration purposes, we'll log it to the console
+      // In a real app, you'd update the data array with fetched details
+    }
+  }, [listInstruments]);
   
   // Sample data for demonstration
   const [data, setData] = useState<AssetItem[]>([

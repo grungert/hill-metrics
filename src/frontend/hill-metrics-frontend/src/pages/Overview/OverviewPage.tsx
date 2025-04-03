@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 
 // Import all the Overview components
@@ -20,31 +20,49 @@ import SimilarInstruments from '../../components/Overview/SimilarInstruments';
 const OverviewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [instrumentName, setInstrumentName] = useState<string>('');
+  const navigate = useNavigate();
   
   // Fetch data for the instrument with the given ID
   useEffect(() => {
     // Simulate data loading
     const loadData = async () => {
-      // In a real application, this would fetch data from an API
-      // For now, we'll just simulate loading
+      // In a real application, this would fetch data from an API based on ID
+      console.log(`Loading details for instrument ID: ${id}`);
+      
+      // Mock name based on ID for demonstration
+      let name = 'Unknown Instrument';
+      if (id === 'btc-1') name = 'Bitcoin';
+      else if (id === 'eth-1') name = 'Ethereum';
+      else if (id === 'btc-cash') name = 'Bitcoin Cash';
+      else if (id === 'btc-sv') name = 'Bitcoin SV';
+      else if (id === 'btc-gold') name = 'Bitcoin Gold';
+      
+      // Simulate API delay
       setTimeout(() => {
+        setInstrumentName(name);
         setLoading(false);
       }, 500);
     };
     
-    loadData();
-  }, [id]);
+    if (id) {
+      loadData();
+    } else {
+      // If no ID is provided, redirect to search page
+      navigate('/search');
+    }
+  }, [id, navigate]);
   
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
-          <p>Loading...</p>
+          <p>Loading details for instrument {id}...</p>
         </div>
       ) : (
         <div className="bg-gray-50 overflow-hidden flex-1">
-          <InstrumentHeader />
+          <InstrumentHeader instrumentName={instrumentName} instrumentId={id || ''} />
           
           {/* Main content wrapper with three columns */}
           <div className="flex min-h-screen">

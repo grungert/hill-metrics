@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import EnhancedSearchBar from './EnhancedSearch/EnhancedSearchBar';
+import useInstrumentStore from '../store/instrumentStore';
 
 interface HeaderProps {
   activeTab?: 'search' | 'comparison'; // Optional as we'll determine from route
@@ -29,6 +30,63 @@ const Header: React.FC<HeaderProps> = ({
     // Navigate to the appropriate route
     navigate(tab === 'search' ? '/search' : '/comparison');
   };
+  // Get instrument store methods
+  const { 
+    addToComparison, 
+    addToList, 
+    setLastSearchTerm, 
+    lastSearchTerm,
+    setIsNavigating
+  } = useInstrumentStore();
+  
+  // Handle search
+  const handleSearch = (query: string) => {
+    setLastSearchTerm(query);
+    if (onSearch) {
+      onSearch(query);
+    }
+  };
+  
+  // Navigation handlers for search actions
+  const handleNavigateToComparison = (itemId: string) => {
+    // Set navigating state to true to keep dropdown open
+    setIsNavigating(true);
+    
+    // Add the instrument to the comparison store
+    addToComparison(itemId);
+    
+    // Navigate to the comparison page in the same tab
+    navigate('/comparison');
+    
+    // Reset navigating state after a short delay (to allow render)
+    setTimeout(() => setIsNavigating(false), 50);
+  };
+  
+  const handleNavigateToSearch = (itemId: string) => {
+    // Set navigating state to true to keep dropdown open
+    setIsNavigating(true);
+    
+    // Add the instrument to the list store
+    addToList(itemId);
+    
+    // Navigate to the search page in the same tab
+    navigate('/search');
+    
+    // Reset navigating state after a short delay (to allow render)
+    setTimeout(() => setIsNavigating(false), 50);
+  };
+  
+  const handleNavigateToOverview = (itemId: string) => {
+    // Set navigating state to true to keep dropdown open
+    setIsNavigating(true);
+    
+    // Navigate to the overview page for the specific instrument in the same tab
+    navigate(`/overview/${itemId}`);
+    
+    // Reset navigating state after a short delay (to allow render)
+    setTimeout(() => setIsNavigating(false), 50);
+  };
+  
   return (
     <header className="flex w-full h-14 justify-between items-center border border-slate-200 bg-white px-8 z-10">
       <div className="flex items-center gap-8">
@@ -66,7 +124,10 @@ const Header: React.FC<HeaderProps> = ({
         <EnhancedSearchBar
           placeholder="Search for assets..."
           className="w-[338px]"
-          onSearch={onSearch}
+          onSearch={handleSearch}
+          onNavigateToComparison={handleNavigateToComparison}
+          onNavigateToSearch={handleNavigateToSearch}
+          onNavigateToOverview={handleNavigateToOverview}
         />
         <div className="flex items-center gap-4">
           <div className="flex w-8 h-8 justify-center items-center rounded cursor-pointer">

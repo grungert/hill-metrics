@@ -1,6 +1,26 @@
 import React from "react";
 
-const InstrumentHeader: React.FC = () => {
+interface InstrumentHeaderProps {
+  instrumentName: string;
+  instrumentId: string;
+}
+
+const InstrumentHeader: React.FC<InstrumentHeaderProps> = ({ 
+  instrumentName = "Bitcoin", 
+  instrumentId 
+}) => {
+  // Get ticker from instrumentName or mock it based on known patterns
+  const getTicker = (name: string): string => {
+    if (name === 'Bitcoin') return 'BTC';
+    if (name === 'Ethereum') return 'ETH';
+    if (name === 'Bitcoin Cash') return 'BCH';
+    if (name === 'Bitcoin SV') return 'BSV';
+    if (name === 'Bitcoin Gold') return 'BTG';
+    // Default to first letters of words in the name
+    return name.split(' ').map(word => word[0]).join('').toUpperCase();
+  };
+  
+  const ticker = getTicker(instrumentName);
   return (
     <div className="border-b-[color:var(--slate-300,#CBD5E1)] w-full pb-[13px] border-b border-solid max-md:max-w-full">
       <div className="flex w-full items-center pt-5 pb-4 px-5 max-md:max-w-full">
@@ -13,10 +33,10 @@ const InstrumentHeader: React.FC = () => {
                 className="aspect-[1] object-contain w-8 self-stretch shrink-0 my-auto"
               />
               <div className="text-slate-900 font-semibold self-stretch my-auto">
-                Bitcoin
+                {instrumentName}
               </div>
               <div className="text-slate-500 font-normal self-stretch my-auto">
-                BTC
+                {ticker}
               </div>
             </div>
             <div className="bg-slate-200 self-stretch gap-1 overflow-hidden text-sm text-slate-600 font-normal leading-none my-auto px-2 py-0.5 rounded-md">
