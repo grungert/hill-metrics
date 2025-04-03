@@ -12,6 +12,7 @@ interface DataTableProps {
   onRowSelect?: (id: string | number, selected: boolean) => void;
   onSearch?: (query: string) => void;
   highlightedRowId?: string | null;
+  itemsPerPage?: number;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -21,7 +22,58 @@ const DataTable: React.FC<DataTableProps> = ({
   onRowSelect,
   onSearch,
   highlightedRowId = null,
+  itemsPerPage = 10,
 }) => {
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  // Calculate total number of pages
+  const totalPages = Math.max(1, Math.ceil(data.length / itemsPerPage));
+  
+  // Get current page data
+  const getCurrentPageData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+    return data.slice(startIndex, endIndex);
+  };
+  
+  // Reset to page 1 when data changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data.length]);
+  
+  // Handle page navigation
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+  
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  
+  // Current page data
+  const currentPageData = getCurrentPageData();
+  
+  // Calculate showing results text
+  const getShowingResultsText = () => {
+    if (data.length === 0) {
+      return "No results";
+    }
+    
+    const startIndex = (currentPage - 1) * itemsPerPage + 1;
+    const endIndex = Math.min(startIndex + currentPageData.length - 1, data.length);
+    return `Showing ${startIndex}-${endIndex} of ${data.length} results`;
+  };
   const navigate = useNavigate();
   
   // Handle row click to navigate to overview page
@@ -405,7 +457,7 @@ const DataTable: React.FC<DataTableProps> = ({
             </tbody>
           ) : (
             <tbody>
-              {data.map((row, rowIndex) => (
+              {currentPageData.map((row, rowIndex) => (
                 <tr
                   key={row.id || rowIndex}
                   className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'} cursor-pointer hover:bg-slate-100 ${
@@ -439,7 +491,7 @@ const DataTable: React.FC<DataTableProps> = ({
                       }`}
                     >
                       {column.id === "number" ? (
-                        rowIndex + 1
+                        (currentPage - 1) * itemsPerPage + rowIndex + 1
                       ) : column.id === "rating" ? (
                         renderRating(row[column.id])
                       ) : column.id === "ytdPercentage" || column.id === "oneYearPercentage" || column.id === "threeYearPercentage" ? (
@@ -465,62 +517,79 @@ const DataTable: React.FC<DataTableProps> = ({
           )}
         </table>
 
-        <div className="flex justify-center items-center bg-white px-3 py-2">
+        <div className="flex justify-between items-center bg-white px-3 py-2">
           <div className="flex items-center gap-4">
             <div className="text-gray-500 text-sm leading-5 gap-2 px-0 py-2.5 rounded-[21px]">
-              {data.length === 0
-                ? "No results"
-                : `Showing ${data.length} results`}
+              {getShowingResultsText()}
             </div>
           </div>
-          <div className="flex-1" />
-          <div className="flex justify-center items-center gap-2">
-            <button
-              className="flex justify-center items-center gap-2 bg-white p-1.5 rounded-lg disabled:opacity-50 border-style"
-              disabled={data.length === 0}
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+          
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2">
+              <button
+                className="flex justify-center items-center gap-2 bg-white p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-white border border-slate-200"
+                onClick={goToPreviousPage}
+                disabled={currentPage === 1 || data.length === 0}
+                aria-label="Previous page"
               >
-                <path
-                  d="M10 12L6 8L10 4"
-                  stroke="#64748B"
-                  strokeWidth="1.33333"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <div className="flex justify-center items-center">
-              <div className="flex items-center justify-center text-white text-xs pag-pedding leading-4 w-7 h-7 bg-slate-900 rounded-md">
-                1
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 12L6 8L10 4"
+                    stroke="#64748B"
+                    strokeWidth="1.33333"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              
+              {/* Page numbers */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => goToPage(page)}
+                    className={`flex items-center justify-center text-xs w-7 h-7 rounded-md transition-colors ${
+                      currentPage === page
+                        ? 'text-white bg-slate-900'
+                        : 'text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
               </div>
-            </div>
-            <button
-              className="flex justify-center items-center gap-2 bg-white pl-2 pr-0 py-1.5 rounded-lg disabled:opacity-50 border-style"
-              disabled={data.length === 0}
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              
+              <button
+                className="flex justify-center items-center gap-2 bg-white p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-white border border-slate-200"
+                onClick={goToNextPage}
+                disabled={currentPage === totalPages || data.length === 0}
+                aria-label="Next page"
               >
-                <path
-                  d="M6 12L10 8L6 4"
-                  stroke="#64748B"
-                  strokeWidth="1.33333"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 12L10 8L6 4"
+                    stroke="#64748B"
+                    strokeWidth="1.33333"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

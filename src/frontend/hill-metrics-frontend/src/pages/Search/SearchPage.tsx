@@ -129,6 +129,126 @@ const SearchPage: React.FC = () => {
       oneYearPercentage: 5.92,
       threeYearPercentage: 17.31,
       date: '2024-04-18'
+    },
+    {
+      id: 8,
+      name: 'iShares MSCI World ETF',
+      category: 'ETF',
+      currency: 'EUR',
+      rating: 4,
+      risk: '2/7',
+      ytdPercentage: 4.85,
+      oneYearPercentage: 12.37,
+      threeYearPercentage: 35.18,
+      date: '2024-04-20'
+    },
+    {
+      id: 9,
+      name: 'Ethereum',
+      category: 'Cryptocurrency',
+      currency: 'USD',
+      rating: 5,
+      risk: '5/7',
+      ytdPercentage: 21.67,
+      oneYearPercentage: 95.32,
+      threeYearPercentage: 312.45,
+      date: '2024-04-22'
+    },
+    {
+      id: 10,
+      name: 'SPDR Gold Shares',
+      category: 'Commodity ETF',
+      currency: 'USD',
+      rating: 3,
+      risk: '2/7',
+      ytdPercentage: 8.43,
+      oneYearPercentage: 14.56,
+      threeYearPercentage: 25.87,
+      date: '2024-04-21'
+    },
+    {
+      id: 11,
+      name: 'U.S. Treasury Bond 2.5%',
+      category: 'Government Bond',
+      currency: 'USD',
+      rating: 4,
+      risk: '1/7',
+      ytdPercentage: 1.25,
+      oneYearPercentage: 3.48,
+      threeYearPercentage: 7.92,
+      date: '2024-04-20'
+    },
+    {
+      id: 12,
+      name: 'Cardano',
+      category: 'Cryptocurrency',
+      currency: 'USD',
+      rating: 3,
+      risk: '4/7',
+      ytdPercentage: 12.76,
+      oneYearPercentage: 54.38,
+      threeYearPercentage: 178.92,
+      date: '2024-04-19'
+    },
+    {
+      id: 13,
+      name: 'Invesco QQQ Trust',
+      category: 'ETF',
+      currency: 'USD',
+      rating: 5,
+      risk: '3/7',
+      ytdPercentage: 8.92,
+      oneYearPercentage: 32.17,
+      threeYearPercentage: 89.53,
+      date: '2024-04-22'
+    },
+    {
+      id: 14,
+      name: 'Solana',
+      category: 'Cryptocurrency',
+      currency: 'USD',
+      rating: 4,
+      risk: '5/7',
+      ytdPercentage: 25.87,
+      oneYearPercentage: 112.42,
+      threeYearPercentage: 358.76,
+      date: '2024-04-21'
+    },
+    {
+      id: 15,
+      name: 'Vanguard Total Bond Market ETF',
+      category: 'Bond ETF',
+      currency: 'USD',
+      rating: 4,
+      risk: '2/7',
+      ytdPercentage: 2.35,
+      oneYearPercentage: 5.67,
+      threeYearPercentage: 10.21,
+      date: '2024-04-20'
+    },
+    {
+      id: 16,
+      name: 'Binance Coin',
+      category: 'Cryptocurrency',
+      currency: 'USD',
+      rating: 3,
+      risk: '4/7',
+      ytdPercentage: 18.62,
+      oneYearPercentage: 75.34,
+      threeYearPercentage: 243.87,
+      date: '2024-04-19'
+    },
+    {
+      id: 18,
+      name: 'Amundi MSCI Emerging Markets ETF',
+      category: 'ETF',
+      currency: 'EUR',
+      rating: 3,
+      risk: '3/7',
+      ytdPercentage: 3.56,
+      oneYearPercentage: 8.92,
+      threeYearPercentage: 23.45,
+      date: '2024-04-18'
     }
   ]);
 

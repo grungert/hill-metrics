@@ -53,12 +53,18 @@ The project has made significant progress in the initialization phase:
        - Color-coded indicators (green for low risk, yellow for moderate, red for high)
      - Fixed duplicate entries in filter hierarchies
      - Improved filter panel UI with better styling and interaction
-     - Implemented bidirectional filter updates: closing filter pills now updates the underlying filter state
+       - Implemented bidirectional filter updates: closing filter pills now updates the underlying filter state
      - Added column visibility and reordering functionality to DataTable:
        - Users can show/hide columns via dropdown menu
        - Columns can be reordered using drag-and-drop
        - Name column is always visible (cannot be hidden)
        - Column state persists during the session
+     - Implemented pagination in DataTable:
+       - Shows 10 items per page with navigation controls
+       - Displays current page range and total items count
+       - Provides intuitive page number buttons
+       - Maintains proper row numbering across pages
+       - Automatically resets to first page when data changes
      - Implemented routing with React Router:
        - Added navigation between Search and Comparison pages
        - Created a basic Comparison page with the same Header component
